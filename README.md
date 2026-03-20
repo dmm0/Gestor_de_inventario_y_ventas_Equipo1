@@ -13,7 +13,7 @@ Para garantizar un uso seguro y organizado del sistema, se implementará un esqu
 En conjunto, este sistema busca mejorar la eficiencia operativa, reducir errores administrativos y fortalecer la toma de decisiones, contribuyendo al crecimiento y organización de Triates Papelería.
 
 - Tecnologías utilizadas:
-  Back-end ->
-  Database ->
-  Front-end ->
-  API ->
+  Back-end -> Java
+  Database -> MySQL
+  Front-end -> JavaFx
+  Servidor -> Localmente
