@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="434.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="166.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="226.0" minHeight="0.0" prefHeight="226.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="267.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <VBox prefHeight="200.0" prefWidth="300.0" spacing="10.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <TextField alignment="CENTER" promptText="Buscar" />
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+               <content>
+                  <TableView editable="true" prefHeight="170.0" prefWidth="396.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Producto" />
+                      <TableColumn prefWidth="75.0" text="Stock" />
+                        <TableColumn prefWidth="75.0" text="Precio" />
+                        <TableColumn prefWidth="75.0" text="+" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
+         <children>
+            <Label text="Resumen de la venta:" />
+            <Label text="Subtotal:" />
+            <Label text="IVA:" />
+            <Label text="Total:" />
+            <Separator prefWidth="200.0" />
+            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Finalizar Venta" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Cancelar operación" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <TableView prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Código" />
+                <TableColumn prefWidth="75.0" text="Descripción" />
+                  <TableColumn prefWidth="75.0" text="Cant." />
+                  <TableColumn prefWidth="75.0" text="Precio/unidad" />
+                  <TableColumn prefWidth="75.0" text="Importe" />
+                  <TableColumn prefWidth="75.0" text="Acción" />
+              </columns>
+            </TableView>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <Button mnemonicParsing="false" text="Imprimir ticket">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" text="Generar Nota Remisión" />
+                  <Button mnemonicParsing="false" text="Solicitar factura" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</GridPane>
