@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="600.0" style="-fx-background-color: B7E1EB;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="36.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Módulo Cotizaciones">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Regresar" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+      <ScrollPane prefHeight="392.0" prefWidth="600.0" style="-fx-background-color: transparent;">
+         <content>
+            <VBox prefHeight="237.0" prefWidth="598.0" spacing="20.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Datos del Cliente" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <VBox prefHeight="42.0" prefWidth="154.0">
+                                 <children>
+                                    <Label text="Nombre:" />
+                                    <TextField />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="42.0" prefWidth="166.0">
+                                 <children>
+                                    <Label text="Teléfono:" />
+                                    <TextField />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="42.0" prefWidth="167.0">
+                                 <children>
+                                    <Label text="Correo:" />
+                                    <TextField />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Agregar Productos a Cotización" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField promptText="Buscar productos" />
+                              <Button mnemonicParsing="false" text="Buscar" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="100.0" prefWidth="541.0">
+                     <children>
+                        <Label text="Tabla de Cotizacion" />
+                        <TableView>
+                          <columns>
+                            <TableColumn prefWidth="193.0" text="Descripción" />
+                            <TableColumn prefWidth="79.0" text="Cantidad" />
+                              <TableColumn prefWidth="93.0" text="Precio" />
+                              <TableColumn minWidth="9.0" prefWidth="102.0" text="Importe" />
+                              <TableColumn minWidth="0.0" prefWidth="73.0" text="Acción" />
+                          </columns>
+                        </TableView>
+                        <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="TOTAL ESTIMADO:" />
+                                    <Label text="\$ 00.00">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="Guardar Cotización" />
+                        <Button mnemonicParsing="false" text="Generar PDF" />
+                        <Button mnemonicParsing="false" text="Enviar por Correo" />
+                        <Region prefHeight="25.0" prefWidth="45.0" />
+                        <Button mnemonicParsing="false" text="Cancelar / Regresar" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>
