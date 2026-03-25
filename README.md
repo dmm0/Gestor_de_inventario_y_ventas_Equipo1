@@ -2,7 +2,7 @@
 
 - Nombre del sistema: Gestor de Inventario y Venta(POS) para una papelería de nombre “Triates Papelería”.
   
-- Integrantes: Johana Lisset Hernández Briones, Jazmín Alejandra García Álvarez, Dante Mexicano Martínez
+- Integrantes: Johana Lisset Hernández Briones, Yazmín Alejandra García Álvarez, Dante Mexicano Martínez
   
 - Descripción del proyecto: El presente proyecto consiste en el desarrollo de un sistema informático integral de gestión administrativa, ventas e inventario para Triates Papelería, cuyo objetivo es centralizar, automatizar y optimizar los procesos operativos del negocio. Actualmente, muchas de estas actividades se realizan de forma manual, lo que puede generar errores en el control de existencias, retrasos en la atención al cliente y dificultad para consultar información histórica.
 El sistema permitirá registrar ventas de manera rápida y precisa, ingresando productos, cantidades y montos totales, realizando de forma automática la actualización del inventario para mantener un control en tiempo real de las existencias. Asimismo, contará con funcionalidades para la generación de documentos comerciales, tales como notas de remisión, cotizaciones y comprobantes, los cuales podrán ser guardados, impresos o exportados en formato PDF, facilitando la documentación y seguimiento de las operaciones.
