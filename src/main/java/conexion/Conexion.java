@@ -5,7 +5,7 @@ package conexion;
  * @author dmm
  */
 
-import java.sql.*;
+import 
 
 public class Conexion {
     public static Connection conectar() {
