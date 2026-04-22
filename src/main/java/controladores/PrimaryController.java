@@ -1,4 +1,4 @@
-package com.mycompany.ingsoftware;
+package controladores;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

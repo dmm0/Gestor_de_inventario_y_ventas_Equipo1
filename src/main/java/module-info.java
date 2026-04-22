@@ -5,6 +5,6 @@ module com.mycompany.ingsoftware {
     requires java.logging;
     requires java.base;
 
-    opens com.mycompany.ingsoftware to javafx.fxml;
-    exports com.mycompany.ingsoftware;
+    opens controladores to javafx.fxml;
+    exports controladores;
 }
