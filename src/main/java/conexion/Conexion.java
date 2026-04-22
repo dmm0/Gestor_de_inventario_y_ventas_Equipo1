@@ -7,10 +7,10 @@ import java.sql.SQLException;
 public class Conexion {
 
     private static final String URL =
-        "jdbc:sqlserver://localhost:1433;databaseName=Ejemplo;encrypt=true;trustServerCertificate=true";
+        "jdbc:mysql://proyecto-ing-software.cpi6ommsww1k.us-east-2.rds.amazonaws.com:3306/proyecto-ing-software";
 
-    private static final String USER = "sa";
-    private static final String PASSWORD = "123"; 
+    private static final String USER = "admin";
+    private static final String PASSWORD = "admin123"; 
 
     public static Connection conectar() {
         try {
