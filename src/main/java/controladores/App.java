@@ -16,22 +16,29 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("inicioSesion"), 640, 480);
+    public void start(Stage stage) {
+        try {
+        scene = new Scene(loadFXML("/forms/inicioSesion.fxml"));
         stage.setScene(scene);
         stage.show();
+    } catch(Exception e) {
+        e.printStackTrace();
+}
     }
-
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
    private static Parent loadFXML(String fxml) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/forms/" + fxml + ".fxml"));
+    var resource = App.class.getResource(fxml);
+    if (resource == null) {
+        throw new IOException("No se encontro el archivo FXML en "+ fxml);
+    }
+    FXMLLoader fxmlLoader = new FXMLLoader(resource);
     return fxmlLoader.load();
     }
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
 }

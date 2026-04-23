@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="301.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.InicioSesionController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="301.0" spacing="20.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.InicioSesionController">
    <children>
       <Label alignment="TOP_CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Triates Papelería" textAlignment="CENTER">
          <font>
@@ -23,8 +23,8 @@
       <Label text="Usuario" />
       <TextField fx:id="txtUser" />
       <Label text="Contraseña" />
-      <TextField fx:id="txtPassword" />
-      <Button fx:id="btnLogin" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#hacerLogin" text="Iniciar Sesión" textAlignment="CENTER">
+      <javafx.scene.control.PasswordField fx:id="txtPassword" />
+      <Button fx:id="btnLogin" alignment="CENTER" maxWidth="Infinity" mnemonicParsing="false" onAction="#hacerLogin" text="Iniciar Sesión" textAlignment="CENTER">
          <VBox.margin>
             <Insets />
          </VBox.margin>
