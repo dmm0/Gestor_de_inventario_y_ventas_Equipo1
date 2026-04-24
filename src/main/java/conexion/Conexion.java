@@ -15,11 +15,11 @@ public class Conexion {
     public static Connection conectar() {
         try {
             Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println(" Conexión exitosa a SQL Server");
+            System.out.println("Conexión exitosa a MySQL");
             return con;
 
         } catch (SQLException e) {
-            System.out.println(" Error de conexión: " + e.getMessage());
+            System.out.println("Error de conexión: " + e.getMessage());
             return null;
         }
     }
