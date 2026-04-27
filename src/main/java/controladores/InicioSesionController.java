@@ -50,7 +50,7 @@ public class InicioSesionController implements Initializable {
 
     private boolean validarLogin(String usuario, String password) {
 
-        String sql = "SELECT * FROM usuario WHERE usuario = ? AND contrasena = ?";
+        String sql = "SELECT * FROM Usuarios WHERE usuario = ? AND contrasena = ?";
 
         try (Connection con = Conexion.conectar()) {
 

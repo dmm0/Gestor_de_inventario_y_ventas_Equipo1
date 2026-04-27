@@ -3,6 +3,7 @@ module com.mycompany.ingsoftware {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop; // Para iconos o componentes AWT si los usas
+    requires java.base;
     
     // Abrir el paquete de controladores para que JavaFX pueda leerlos
     opens controladores to javafx.fxml;
