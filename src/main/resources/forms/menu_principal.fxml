@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.Menu_principalController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox prefHeight="52.0" prefWidth="600.0">
          <children>
@@ -39,6 +38,14 @@
             <Button fx:id="btn_gestionInv" mnemonicParsing="false" onAction="#btn_menuInventario" prefHeight="50.0" prefWidth="150.0" text="Gestionar Inventario" />
             <Button fx:id="btn_registrarEgreso" mnemonicParsing="false" onAction="#btn_menuEgresos" prefHeight="50.0" prefWidth="150.0" text="Resgitrar Egresos" />
             <Button fx:id="btn_copias" mnemonicParsing="false" onAction="#btn_menuCopias" prefHeight="50.0" prefWidth="150.0" text="Copias Seguridad" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Datos para facturar" />
          </children>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
