@@ -38,7 +38,7 @@ public class EditarUsuarioController {
     @FXML
     private void actualizar() {
 
-        // 🔴 VALIDAR VACÍOS
+        // VALIDAR VACÍOS
         if (txtNombre.getText().isEmpty() ||
             txtTelefono.getText().isEmpty() ||
             txtPuesto.getText().isEmpty() ||
@@ -50,19 +50,19 @@ public class EditarUsuarioController {
             return;
         }
 
-        // 🔴 VALIDAR CORREO
+        //  VALIDAR CORREO
         if (!txtCorreo.getText().contains("@")) {
             alerta("Correo inválido", "Debe contener @");
             return;
         }
 
-        // 🔴 VALIDAR USUARIO DUPLICADO
+        //  VALIDAR USUARIO DUPLICADO
         if (existeUsuario(txtUsuario.getText())) {
             alerta("Error", "El usuario ya existe");
             return;
         }
 
-        // 🔴 VALIDAR PASSWORD SOLO SI SE LLENA
+        //  VALIDAR PASSWORD SOLO SI SE LLENA
         if (!txtPassword.getText().isEmpty()) {
             if (!validarPassword(txtPassword.getText())) {
                 alerta("Contraseña inválida",
@@ -87,26 +87,29 @@ public class EditarUsuarioController {
             // USUARIO
             String sqlUsuario;
 
-            if (!txtPassword.getText().isEmpty()) {
-                sqlUsuario = "UPDATE usuario SET usuario=?, password=?, rol=? WHERE id_usuario=?";
-            } else {
-                sqlUsuario = "UPDATE usuario SET usuario=?, rol=? WHERE id_usuario=?";
-            }
-
-            PreparedStatement p2 = con.prepareStatement(sqlUsuario);
-
-            p2.setString(1, txtUsuario.getText());
+            PreparedStatement p2;
 
             if (!txtPassword.getText().isEmpty()) {
-                p2.setString(2, txtPassword.getText());
-                p2.setString(3, cbRol.getValue());
-                p2.setInt(4, idUsuario);
-            } else {
-                p2.setString(2, cbRol.getValue());
+
+            p2 = con.prepareStatement(
+            "UPDATE usuario SET usuario=?, password=?, rol=? WHERE id_usuario=?");
+
+                 p2.setString(1, txtUsuario.getText());
+                 p2.setString(2, txtPassword.getText());
+                 p2.setString(3, cbRol.getValue());
+                 p2.setInt(4, idUsuario);
+
+            }               else {
+
+                p2 = con.prepareStatement(
+                 "UPDATE usuario SET usuario=?, rol=? WHERE id_usuario=?");
+
+                p2.setString(1, txtUsuario.getText());
+                 p2.setString(2, cbRol.getValue());
                 p2.setInt(3, idUsuario);
-            }
+}
 
-            p2.executeUpdate();
+                p2.executeUpdate();
 
             alerta("Éxito", "Usuario actualizado");
             cerrar();
@@ -117,13 +120,13 @@ public class EditarUsuarioController {
         }
     }
 
-    // 🔐 VALIDAR PASSWORD
+    //  VALIDAR PASSWORD
     private boolean validarPassword(String password) {
         String regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$";
         return Pattern.matches(regex, password);
     }
 
-    // 🔍 VALIDAR DUPLICADO
+    //  VALIDAR DUPLICADO
     private boolean existeUsuario(String usuario) {
         String sql = "SELECT * FROM usuario WHERE usuario=? AND id_usuario<>?";
 
