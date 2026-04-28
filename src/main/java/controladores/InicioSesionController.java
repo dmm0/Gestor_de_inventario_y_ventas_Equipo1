@@ -1,6 +1,7 @@
 package controladores;
 
 import conexion.Conexion;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +29,7 @@ public class InicioSesionController implements Initializable {
     }
 
     @FXML
-    private void iniciarSesion() {
+    private void iniciarSesion() throws IOException {
 
         String usuario = txtUsuario.getText().trim();
         String password = txtPassword.getText().trim();
@@ -40,7 +41,8 @@ public class InicioSesionController implements Initializable {
 
         if (validarLogin(usuario, password)) {
             mostrarExito("Bienvenido");
-            // Aquí puedes cambiar de pantalla después
+            // cambio de pantalla
+            App.setRoot("menu_principal");
         } else {
             mostrarError("Usuario o contraseña incorrectos");
         }

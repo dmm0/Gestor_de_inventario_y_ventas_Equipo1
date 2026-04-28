@@ -10,21 +10,28 @@ import java.io.IOException;
 
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
+        try {
+            
         scene = new Scene(loadFXML("inicioSesion"), 640, 480);
+        
         stage.setScene(scene);
-        stage.setTitle("Login - Triates Papelería");
         stage.show();
+    } catch(Exception e) {
+        e.printStackTrace();
     }
-
+}
     public static void setRoot(String fxml) throws IOException {
+        if (scene == null ) {
+            System.out.println("Error: La escena no ha sido inicializada");
+        }
         scene.setRoot(loadFXML(fxml));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    public static Parent loadFXML(String fxml) throws IOException {
         var resource = App.class.getResource("/forms/" + fxml + ".fxml");
 
         if (resource == null) {
