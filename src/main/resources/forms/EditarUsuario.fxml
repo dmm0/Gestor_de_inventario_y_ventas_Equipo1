@@ -1,0 +1,11 @@
+<VBox spacing="10" xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controladores.EditarUsuarioController">
+
+    <TextField fx:id="txtNombre" promptText="Nombre"/>
+    <TextField fx:id="txtUsuario" promptText="Usuario"/>
+    <TextField fx:id="txtRol" promptText="Rol"/>
+
+    <Button text="Actualizar" onAction="#actualizar"/>
+
+</VBox>

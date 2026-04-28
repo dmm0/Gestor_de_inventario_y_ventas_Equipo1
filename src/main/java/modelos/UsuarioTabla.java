@@ -6,17 +6,23 @@ package modelos;
 
 public class UsuarioTabla {
 
+    private int idUsuario;
+    private int idEmpleado;
     private String usuario;
-    private String nombreReal;
-    private String estado;
+    private String nombre;
+    private String rol;
 
-    public UsuarioTabla(String usuario, String nombreReal, String estado) {
+    public UsuarioTabla(int idUsuario, int idEmpleado, String usuario, String nombre, String rol) {
+        this.idUsuario = idUsuario;
+        this.idEmpleado = idEmpleado;
         this.usuario = usuario;
-        this.nombreReal = nombreReal;
-        this.estado = estado;
+        this.nombre = nombre;
+        this.rol = rol;
     }
 
+    public int getIdUsuario() { return idUsuario; }
+    public int getIdEmpleado() { return idEmpleado; }
     public String getUsuario() { return usuario; }
-    public String getNombreReal() { return nombreReal; }
-    public String getEstado() { return estado; }
+    public String getNombre() { return nombre; }
+    public String getRol() { return rol; }
 }
