@@ -14,7 +14,8 @@ import javafx.stage.Stage;
 public class CrearUsuarioController {
 
     @FXML private TextField txtNombre, txtTelefono, txtPuesto, txtCorreo;
-    @FXML private TextField txtUsuario, txtRol;
+    @FXML private TextField txtUsuario;
+    @FXML private ComboBox<String> txtRol;
     @FXML private PasswordField txtPassword;
     @FXML private TextField txtTipoPermiso, txtDescripcion;
 
@@ -28,7 +29,7 @@ public class CrearUsuarioController {
             txtCorreo.getText().isEmpty() ||
             txtUsuario.getText().isEmpty() ||
             txtPassword.getText().isEmpty() ||
-            txtRol.getText().isEmpty()) {
+            txtRol.getValue() == null) {
 
             mostrarAlerta("Error", "Todos los campos son obligatorios");
             return;
@@ -78,7 +79,7 @@ public class CrearUsuarioController {
             ps2.setInt(1, idEmpleado);
             ps2.setString(2, txtUsuario.getText());
             ps2.setString(3, txtPassword.getText());
-            ps2.setString(4, txtRol.getText());
+            ps2.setString(4, txtRol.getValue());;
             ps2.executeUpdate();
 
             ResultSet rs2 = ps2.getGeneratedKeys();

@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
+<VBox fx:controller="controladores.CopiasSeguridadController"
+      prefHeight="400.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <!-- HEADER -->
    <children>
-      <HBox prefHeight="41.0" prefWidth="600.0" style="-fx-background-color: A3E0E6;">
+      <HBox prefHeight="41.0" style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Copias de Seguridad (Respaldo del Sistema)">
                <font>
-                  <Font size="16.0" />
+                  <Font size="16.0"/>
                </font>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets top="10" right="10" bottom="10" left="10"/>
                </padding>
             </Label>
          </children>
       </HBox>
-      <ScrollPane fitToWidth="true" prefHeight="355.0" prefWidth="600.0">
+
+      <!-- CONTENIDO -->
+      <ScrollPane fitToWidth="true">
          <content>
-            <VBox prefHeight="200.0" prefWidth="584.0" spacing="15.0">
-               <children>
-                  <Label text="Seleccionar tipo de respaldo">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                     <children>
-                        <RadioButton mnemonicParsing="false" text="Respaldo Completo (Recomendado)" />
-                        <RadioButton mnemonicParsing="false" text="Solo Ventas" />
-                        <RadioButton mnemonicParsing="false" text="Solo Inventario" />
-                        <RadioButton mnemonicParsing="false" text="Solo Clientes" />
-                     </children>
-                  </VBox>
-                  <Label text="Ubicación de guardado">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0">
-                     <children>
-                        <Label text="Ruta de destino:" />
-                        <TextField editable="false" />
-                        <Button mnemonicParsing="false" text="Seleccionar ubicación / carpeta" />
-                     </children>
-                  </VBox>
-                  <Separator prefWidth="200.0" />
-                  <Label text="Acciones" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button mnemonicParsing="false" text="Generar Copia" />
-                        <Button mnemonicParsing="false" text="Cancelar" />
-                     </children>
-                  </HBox>
-               </children>
+
+            <VBox spacing="20.0">
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets top="20" right="20" bottom="20" left="20"/>
                </padding>
+
+               <Label text="Seleccionar tipo de respaldo">
+                  <font><Font size="14.0"/></font>
+               </Label>
+
+               <VBox spacing="10.0">
+                  <children>
+                     <RadioButton fx:id="rbCompleto" text="Respaldo Completo (Recomendado)" />
+                     <RadioButton fx:id="rbVentas" text="Solo Ventas" />
+                     <RadioButton fx:id="rbInventario" text="Solo Inventario" />
+                     <RadioButton fx:id="rbClientes" text="Solo Clientes" />
+                  </children>
+               </VBox>
+
+               <Label text="Ubicación de guardado">
+                  <font><Font size="14.0"/></font>
+               </Label>
+
+               <VBox spacing="8.0">
+                  <children>
+                     <Label text="Ruta de destino:" />
+                     <TextField fx:id="txtRuta" editable="false" />
+                     <Button text="Seleccionar ubicación / carpeta"
+                             onAction="#seleccionarCarpeta"/>
+                  </children>
+               </VBox>
+
+               <Separator/>
+
+               <HBox alignment="CENTER" spacing="15.0">
+                  <children>
+                     <Button text="Generar Copia" onAction="#generarBackup"/>
+                     <Button text="Cancelar" onAction="#cerrarVentana"/>
+                  </children>
+               </HBox>
+
             </VBox>
+
          </content>
       </ScrollPane>
+
    </children>
 </VBox>
