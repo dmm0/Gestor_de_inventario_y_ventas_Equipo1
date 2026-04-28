@@ -12,12 +12,22 @@ public class UsuarioTabla {
     private String nombre;
     private String rol;
 
-    public UsuarioTabla(int idUsuario, int idEmpleado, String usuario, String nombre, String rol) {
+    private String telefono;
+    private String puesto;
+    private String correo;
+
+    public UsuarioTabla(int idUsuario, int idEmpleado, String usuario,
+                        String nombre, String rol,
+                        String telefono, String puesto, String correo) {
+
         this.idUsuario = idUsuario;
         this.idEmpleado = idEmpleado;
         this.usuario = usuario;
         this.nombre = nombre;
         this.rol = rol;
+        this.telefono = telefono;
+        this.puesto = puesto;
+        this.correo = correo;
     }
 
     public int getIdUsuario() { return idUsuario; }
@@ -25,4 +35,8 @@ public class UsuarioTabla {
     public String getUsuario() { return usuario; }
     public String getNombre() { return nombre; }
     public String getRol() { return rol; }
+
+    public String getTelefono() { return telefono; }
+    public String getPuesto() { return puesto; }
+    public String getCorreo() { return correo; }
 }

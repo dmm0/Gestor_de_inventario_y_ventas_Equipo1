@@ -1,10 +1,36 @@
-<VBox spacing="10" xmlns="http://javafx.com/javafx/21"
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10"
+      xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controladores.EditarUsuarioController">
 
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Editar Usuario"/>
+
+    <!-- EMPLEADO -->
+    <Label text="Datos del Empleado"/>
     <TextField fx:id="txtNombre" promptText="Nombre"/>
+    <TextField fx:id="txtTelefono" promptText="Teléfono"/>
+    <TextField fx:id="txtPuesto" promptText="Puesto"/>
+    <TextField fx:id="txtCorreo" promptText="Correo"/>
+
+    <!-- USUARIO -->
+    <Label text="Datos de Usuario"/>
     <TextField fx:id="txtUsuario" promptText="Usuario"/>
-    <TextField fx:id="txtRol" promptText="Rol"/>
+    
+    <ComboBox fx:id="cbRol" promptText="Selecciona rol"/>
+
+    <!-- CONTRASEÑA -->
+    <Label text="Cambiar contraseña (opcional)"/>
+    <PasswordField fx:id="txtPassword" promptText="Nueva contraseña"/>
 
     <Button text="Actualizar" onAction="#actualizar"/>
 

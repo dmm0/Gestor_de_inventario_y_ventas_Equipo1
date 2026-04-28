@@ -38,8 +38,8 @@ public class AdminUsuariosController implements Initializable {
     private void cargarUsuarios() {
         ObservableList<UsuarioTabla> lista = FXCollections.observableArrayList();
 
-        String sql = "SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.rol " +
-                     "FROM usuario u JOIN empleado e ON u.empleado_id_empleado = e.id_empleado";
+        String sql = "SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.rol,\n" +
+"       e.telefono, e.puesto, e.correo";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -47,11 +47,15 @@ public class AdminUsuariosController implements Initializable {
 
             while (rs.next()) {
                 lista.add(new UsuarioTabla(
-                        rs.getInt("id_usuario"),
-                        rs.getInt("id_empleado"),
-                        rs.getString("usuario"),
-                        rs.getString("nombre"),
-                        rs.getString("rol")
+            rs.getInt("id_usuario"),
+            rs.getInt("id_empleado"),
+            rs.getString("usuario"),
+            rs.getString("nombre"),
+            rs.getString("rol"),
+            rs.getString("telefono"),
+            rs.getString("puesto"),
+            rs.getString("correo")
+
                 ));
             }
 

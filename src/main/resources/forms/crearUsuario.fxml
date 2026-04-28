@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 
@@ -8,13 +9,29 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controladores.CrearUsuarioController">
 
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
     <Label text="Crear Usuario"/>
 
+    <!-- EMPLEADO -->
+    <Label text="Datos del Empleado"/>
     <TextField fx:id="txtNombre" promptText="Nombre"/>
     <TextField fx:id="txtTelefono" promptText="Teléfono"/>
+    <TextField fx:id="txtPuesto" promptText="Puesto"/>
+    <TextField fx:id="txtCorreo" promptText="Correo"/>
 
+    <!-- USUARIO -->
+    <Label text="Datos de Usuario"/>
     <TextField fx:id="txtUsuario" promptText="Usuario"/>
     <PasswordField fx:id="txtPassword" promptText="Contraseña"/>
+    <TextField fx:id="txtRol" promptText="Rol"/>
+
+    <!-- PERMISOS -->
+    <Label text="Permisos"/>
+    <TextField fx:id="txtTipoPermiso" promptText="Tipo de permiso"/>
+    <TextField fx:id="txtDescripcion" promptText="Descripción"/>
 
     <Button text="Guardar" onAction="#guardarUsuario"/>
 
