@@ -54,7 +54,7 @@ public class InicioSesionController implements Initializable {
 
         String sql = "SELECT * FROM Usuarios WHERE usuario = ? AND contrasena = ?";
 
-        try (Connection con = Conexion.conectar()) {
+        try (Connection con = Conexion.getConnection())  {
 
             if (con == null) return false;
 

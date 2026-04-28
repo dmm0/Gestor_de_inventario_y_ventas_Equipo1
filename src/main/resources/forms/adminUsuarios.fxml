@@ -19,7 +19,7 @@
                   <Font size="19.0" />
                </font>
                <padding>
-                  <Insets top="10" bottom="10" left="10" right="10"/>
+                  <Insets top="10" right="10" bottom="10" left="10"/>
                </padding>
             </Label>
          </children>
@@ -36,7 +36,7 @@
             </HBox>
          </children>
          <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            <Insets top="20" right="20" bottom="20" left="20"/>
          </padding>
       </VBox>
 
@@ -45,26 +45,24 @@
             <Label text="Usuarios Registrados en el Sistema:"/>
 
             <TableView fx:id="table_Usuarios">
-
                <columns>
                   <TableColumn fx:id="colUsuario" text="Usuario"/>
                   <TableColumn fx:id="colNombre" text="Nombre Real"/>
                   <TableColumn fx:id="colEstado" text="Estado"/>
                   <TableColumn fx:id="colAcciones" text="Acciones"/>
                </columns>
-
             </TableView>
 
          </children>
          <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            <Insets top="20" right="20" bottom="20" left="20"/>
          </padding>
       </VBox>
 
    </children>
 
    <padding>
-      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+      <Insets top="20" right="20" bottom="20" left="20"/>
    </padding>
 
 </VBox>
