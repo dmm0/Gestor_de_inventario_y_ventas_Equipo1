@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="400.0" prefWidth="600.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/25"
+      xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="controladores.AdminUsuariosController">
 
@@ -36,7 +36,7 @@
             </HBox>
          </children>
          <padding>
-            <Insets all="15"/>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
       </VBox>
 
@@ -57,14 +57,14 @@
 
          </children>
          <padding>
-            <Insets all="15"/>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
       </VBox>
 
    </children>
 
    <padding>
-      <Insets all="20"/>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
    </padding>
 
 </VBox>

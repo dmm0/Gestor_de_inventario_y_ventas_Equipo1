@@ -4,6 +4,7 @@
  */
 package controladores;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -40,7 +41,8 @@ public class Menu_principalController implements Initializable {
     }    
     
     @FXML
-    private void btn_menuAdmin(ActionEvent event) {
+    private void btn_menuAdmin(ActionEvent event) throws IOException {
+        App.setRoot("adminUsuarios");
     }
 
     @FXML
