@@ -3,58 +3,69 @@ package controladores;
 import conexion.Conexion;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class InicioSesionController implements Initializable {
 
-    @FXML
-    private TextField txtUsuario;
+    @FXML private TextField txtUsuario;
+    @FXML private PasswordField txtPassword;
+    @FXML private TextField txtPasswordVisible;
 
-    @FXML
-    private PasswordField txtPassword;
-
-    @FXML
-    private Label lblMensaje;
+    private boolean mostrando = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    }
+
+    // 🔥 MOSTRAR / OCULTAR
+    @FXML
+    private void togglePassword() {
+
+        if (mostrando) {
+            txtPassword.setText(txtPasswordVisible.getText());
+            txtPassword.setVisible(true);
+            txtPasswordVisible.setVisible(false);
+        } else {
+            txtPasswordVisible.setText(txtPassword.getText());
+            txtPassword.setVisible(false);
+            txtPasswordVisible.setVisible(true);
+        }
+
+        mostrando = !mostrando;
     }
 
     @FXML
     private void iniciarSesion() throws IOException {
 
         String usuario = txtUsuario.getText().trim();
-        String password = txtPassword.getText().trim();
+
+        // Tomar contraseña dependiendo de cuál está visible
+        String password = mostrando 
+                ? txtPasswordVisible.getText().trim() 
+                : txtPassword.getText().trim();
 
         if (usuario.isEmpty() || password.isEmpty()) {
-            mostrarError("Debes llenar todos los campos");
+            mostrarAlerta("Debes llenar todos los campos");
             return;
         }
 
         if (validarLogin(usuario, password)) {
-            mostrarExito("Bienvenido");
-            // cambio de pantalla
+            mostrarAlerta("Bienvenido " + usuario);
             App.setRoot("menu_principal");
         } else {
-            mostrarError("Usuario o contraseña incorrectos");
+            mostrarAlerta("Usuario o contraseña incorrectos");
         }
-
-        txtPassword.clear();
     }
 
     private boolean validarLogin(String usuario, String password) {
 
         String sql = "SELECT * FROM Usuarios WHERE usuario = ? AND contrasena = ?";
 
-        try (Connection con = Conexion.getConnection())  {
+        try (Connection con = Conexion.getConnection()) {
 
             if (con == null) return false;
 
@@ -68,17 +79,15 @@ public class InicioSesionController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarAlerta("Error de conexión");
             return false;
         }
     }
 
-    private void mostrarError(String mensaje) {
-        lblMensaje.setStyle("-fx-text-fill: red;");
-        lblMensaje.setText(mensaje);
-    }
-
-    private void mostrarExito(String mensaje) {
-        lblMensaje.setStyle("-fx-text-fill: green;");
-        lblMensaje.setText(mensaje);
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
