@@ -1,82 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controladores.RegistrarEgresosController"
+      prefHeight="400.0" prefWidth="600.0">
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox prefHeight="44.0" prefWidth="600.0" style="-fx-background-color: A3E0E6;">
+
+      <HBox style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Registrar Egreso">
                <font>
                   <Font size="18.0" />
                </font>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets top="10" bottom="10" left="10"/>
                </padding>
             </Label>
          </children>
       </HBox>
-      <ScrollPane fitToWidth="true" prefHeight="347.0" prefWidth="600.0">
+
+      <ScrollPane fitToWidth="true">
          <content>
-            <VBox prefHeight="200.0" prefWidth="585.0" spacing="15.0">
-               <children>
-                  <Label text="Datos del gasto" />
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Fecha del Egreso: xx/xx/xxxx" />
-                        <TextField editable="false" />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Concepto: [Pago a Proveedores...] *" />
-                        <ComboBox prefWidth="150.0" />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Monto ($): *" />
-                        <TextField text="\$ 1234" />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Referencia / Ticket (Opcional):" />
-                        <TextField promptText="Ej: Ticket #A-9988" />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label text="Observaciones (Opcional):" />
-                        <TextArea prefHeight="100.0" prefWidth="200.0" wrapText="true" />
-                     </children>
-                  </VBox>
-                  <Separator prefWidth="200.0" />
-                  <Label text="Acciones" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                     <children>
-                        <Button mnemonicParsing="false" text="Guardar Egreso" />
-                        <Button mnemonicParsing="false" text="Limpiar" />
-                        <Button mnemonicParsing="false" text="Cancelar" />
-                     </children>
-                  </HBox>
-               </children>
+            <VBox spacing="15">
+               
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets top="20" bottom="20" left="20" right="20"/>
                </padding>
+
+               <Label text="Datos del gasto"/>
+
+               <VBox>
+                  <Label text="Fecha del Egreso"/>
+                  <TextField fx:id="txtFecha" editable="false"/>
+               </VBox>
+
+               <VBox>
+                  <Label text="Concepto *"/>
+                  <ComboBox fx:id="cbConcepto" editable="true"/>
+               </VBox>
+
+               <VBox>
+                  <Label text="Monto ($) *"/>
+                  <TextField fx:id="txtMonto" promptText="Ej: 1234.50"/>
+               </VBox>
+
+               <VBox>
+                  <Label text="Referencia (Opcional)"/>
+                  <TextField fx:id="txtReferencia"/>
+               </VBox>
+
+               <VBox>
+                  <Label text="Observaciones (Opcional)"/>
+                  <TextArea fx:id="txtObservaciones" prefHeight="80" wrapText="true"/>
+               </VBox>
+
+               <Separator/>
+
+               <HBox spacing="10" alignment="CENTER">
+                  <Button text="Guardar Egreso" onAction="#guardarEgreso"/>
+                  <Button text="Limpiar" onAction="#limpiarCampos"/>
+                  <Button text="Cancelar" onAction="#cancelar"/>
+               </HBox>
+
             </VBox>
          </content>
       </ScrollPane>
+
    </children>
 </VBox>
