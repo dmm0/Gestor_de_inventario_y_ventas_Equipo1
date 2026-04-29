@@ -4,50 +4,54 @@
  */
 package controladores;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-/**
- * FXML Controller class
- *
- * @author User
- */
-public class CopiasSeguridadController implements Initializable {
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
+
+public class CopiasSeguridadController {
+
+    @FXML private RadioButton rbCompleto;
+    @FXML private RadioButton rbVentas;
+    @FXML private RadioButton rbInventario;
+    @FXML private RadioButton rbClientes;
+
+    @FXML private TextField txtRuta;
 
     @FXML
-    private RadioButton rbCompleto;
-    @FXML
-    private RadioButton rbVentas;
-    @FXML
-    private RadioButton rbInventario;
-    @FXML
-    private RadioButton rbClientes;
-    @FXML
-    private TextField txtRuta;
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
-    @FXML
-    private void seleccionarCarpeta(ActionEvent event) {
+    private void seleccionarCarpeta() {
+        DirectoryChooser dc = new DirectoryChooser();
+        dc.setTitle("Seleccionar carpeta");
+
+        Stage stage = (Stage) txtRuta.getScene().getWindow();
+        File file = dc.showDialog(stage);
+
+        if (file != null) {
+            txtRuta.setText(file.getAbsolutePath());
+        }
     }
 
     @FXML
-    private void generarBackup(ActionEvent event) {
+    private void generarBackup() {
+        System.out.println("Generando backup en: " + txtRuta.getText());
+
+        if (rbCompleto.isSelected()) {
+            System.out.println("Backup completo");
+        } else if (rbVentas.isSelected()) {
+            System.out.println("Backup ventas");
+        } else if (rbInventario.isSelected()) {
+            System.out.println("Backup inventario");
+        } else if (rbClientes.isSelected()) {
+            System.out.println("Backup clientes");
+        }
     }
 
     @FXML
-    private void cerrarVentana(ActionEvent event) {
+    private void cerrarVentana() {
+        Stage stage = (Stage) txtRuta.getScene().getWindow();
+        stage.close();
     }
-
 }
