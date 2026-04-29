@@ -5,8 +5,7 @@
 package controladores;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -36,22 +35,60 @@ public class CopiasSeguridadController {
 
     @FXML
     private void generarBackup() {
-        System.out.println("Generando backup en: " + txtRuta.getText());
 
-        if (rbCompleto.isSelected()) {
-            System.out.println("Backup completo");
-        } else if (rbVentas.isSelected()) {
-            System.out.println("Backup ventas");
-        } else if (rbInventario.isSelected()) {
-            System.out.println("Backup inventario");
-        } else if (rbClientes.isSelected()) {
-            System.out.println("Backup clientes");
+        String ruta = txtRuta.getText().trim();
+
+        //  VALIDAR RUTA
+        if (ruta.isEmpty()) {
+            mostrarAlerta("Debes seleccionar una carpeta");
+            return;
         }
+
+        File carpeta = new File(ruta);
+        if (!carpeta.exists() || !carpeta.isDirectory()) {
+            mostrarAlerta("La ruta no es válida");
+            return;
+        }
+
+        //  VALIDAR OPCIÓN
+        if (!rbCompleto.isSelected() && !rbVentas.isSelected() &&
+            !rbInventario.isSelected() && !rbClientes.isSelected()) {
+
+            mostrarAlerta("Debes seleccionar un tipo de respaldo");
+            return;
+        }
+
+        //  PROCESO (simulado)
+        String tipo = "";
+
+        if (rbCompleto.isSelected()) tipo = "Backup completo";
+        else if (rbVentas.isSelected()) tipo = "Backup ventas";
+        else if (rbInventario.isSelected()) tipo = "Backup inventario";
+        else if (rbClientes.isSelected()) tipo = "Backup clientes";
+
+        System.out.println("Generando " + tipo + " en: " + ruta);
+
+        mostrarExito("Respaldo generado correctamente:\n" + tipo);
     }
 
     @FXML
     private void cerrarVentana() {
         Stage stage = (Stage) txtRuta.getScene().getWindow();
         stage.close();
+    }
+
+    //  ALERTAS
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Error");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mostrarExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Éxito");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
