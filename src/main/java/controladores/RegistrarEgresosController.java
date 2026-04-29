@@ -5,6 +5,7 @@
 package controladores;
 
 import conexion.Conexion;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
@@ -132,9 +133,9 @@ public class RegistrarEgresosController implements Initializable {
     }
 
     @FXML
-    private void cancelar() {
-        txtFecha.getScene().getWindow().hide();
-    }
+        private void regresarMenu() throws IOException {
+        App.setRoot("menu_principal"); // nombre de tu FXML del menú
+}
 
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

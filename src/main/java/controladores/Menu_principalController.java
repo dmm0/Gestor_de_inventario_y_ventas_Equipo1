@@ -11,58 +11,51 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-import javafx.scene.control.Button;
-/**
- * FXML Controller class
- *
- * @author User
- */
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+
 public class Menu_principalController implements Initializable {
 
-
-    @FXML
-    private Button btn_adminUsuario;
-    @FXML
-    private Button btn_registrarVenta;
-    @FXML
-    private Button btn_generarCoti;
-    @FXML
-    private Button btn_gestionInv;
-    @FXML
-    private Button btn_registrarEgreso;
-    @FXML
-    private Button btn_copias;
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // Inicialización (si necesitas algo)
     }    
-    
+
+    // 🔹 ADMIN USUARIOS
     @FXML
     private void btn_menuAdmin(ActionEvent event) throws IOException {
         App.setRoot("adminUsuarios");
     }
 
+    // 🔹 VENTAS
     @FXML
-    private void btn_menuVentas(ActionEvent event) {
+    private void btn_menuVentas(ActionEvent event) throws IOException {
+        App.setRoot("registrarVenta");
     }
 
+    // 🔹 COTIZACIÓN
     @FXML
-    private void btn_menuCotizacion(ActionEvent event) {
+    private void btn_menuCotizacion(ActionEvent event) throws IOException {
+        App.setRoot("generarCotizacion");
     }
 
+    // 🔹 INVENTARIO
     @FXML
-    private void btn_menuInventario(ActionEvent event) {
+    private void btn_menuInventario(ActionEvent event) throws IOException {
+        App.setRoot("registroEntradaMercancia");
     }
 
+    // 🔹 EGRESOS
     @FXML
-    private void btn_menuEgresos(ActionEvent event) {
+    private void btn_menuEgresos(ActionEvent event) throws IOException {
+        App.setRoot("registrarEgresos");
     }
 
+    // 🔹 COPIAS DE SEGURIDAD
     @FXML
-    private void btn_menuCopias(ActionEvent event) {
+    private void btn_menuCopias(ActionEvent event) throws IOException {
+        App.setRoot("copiasSeguridad");
     }
-
 }

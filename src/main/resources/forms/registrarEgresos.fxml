@@ -64,7 +64,7 @@
                <HBox spacing="10" alignment="CENTER">
                   <Button text="Guardar Egreso" onAction="#guardarEgreso"/>
                   <Button text="Limpiar" onAction="#limpiarCampos"/>
-                  <Button text="Cancelar" onAction="#cancelar"/>
+                  <Button text="Regresar al menu" onAction="#regresarMenu"/>
                </HBox>
 
             </VBox>

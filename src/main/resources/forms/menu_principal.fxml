@@ -8,7 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="controladores.Menu_principalController"
+      maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1">
+
    <children>
       <HBox prefHeight="52.0" prefWidth="600.0">
          <children>
@@ -22,34 +28,45 @@
             </Label>
          </children>
       </HBox>
+
       <Separator prefWidth="200.0" />
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+
+      <HBox spacing="60.0">
          <children>
-            <Button fx:id="btn_adminUsuario" mnemonicParsing="false" onAction="#btn_menuAdmin" prefHeight="51.0" prefWidth="150.0" text="Administracion Usuarios" />
-            <Button fx:id="btn_registrarVenta" mnemonicParsing="false" onAction="#btn_menuVentas" prefHeight="50.0" prefWidth="150.0" text="Registrar Venta" />
-            <Button fx:id="btn_generarCoti" mnemonicParsing="false" onAction="#btn_menuCotizacion" prefHeight="50.0" prefWidth="150.0" text="Generar Cotizacion" />
+            <Button fx:id="btn_adminUsuario" onAction="#btn_menuAdmin"
+                    prefWidth="150.0" text="Administracion Usuarios" />
+            <Button fx:id="btn_registrarVenta" onAction="#btn_menuVentas"
+                    prefWidth="150.0" text="Registrar Venta" />
+            <Button fx:id="btn_generarCoti" onAction="#btn_menuCotizacion"
+                    prefWidth="150.0" text="Generar Cotizacion" />
          </children>
          <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" bottom="10.0"/>
          </padding>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+
+      <HBox spacing="60.0">
          <children>
-            <Button fx:id="btn_gestionInv" mnemonicParsing="false" onAction="#btn_menuInventario" prefHeight="50.0" prefWidth="150.0" text="Gestionar Inventario" />
-            <Button fx:id="btn_registrarEgreso" mnemonicParsing="false" onAction="#btn_menuEgresos" prefHeight="50.0" prefWidth="150.0" text="Resgitrar Egresos" />
-            <Button fx:id="btn_copias" mnemonicParsing="false" onAction="#btn_menuCopias" prefHeight="50.0" prefWidth="150.0" text="Copias Seguridad" />
+            <Button fx:id="btn_gestionInv" onAction="#btn_menuInventario"
+                    prefWidth="150.0" text="Gestionar Inventario" />
+            <Button fx:id="btn_registrarEgreso" onAction="#btn_menuEgresos"
+                    prefWidth="150.0" text="Registrar Egresos" />
+            <Button fx:id="btn_copias" onAction="#btn_menuCopias"
+                    prefWidth="150.0" text="Copias Seguridad" />
          </children>
          <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" bottom="10.0"/>
          </padding>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+
+      <HBox spacing="60.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Datos para facturar" />
+            <Button prefWidth="150.0" text="Datos para Facturar" />
          </children>
          <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" bottom="10.0"/>
          </padding>
       </HBox>
+
    </children>
 </VBox>

@@ -10,6 +10,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CopiasSeguridadController {
 
@@ -72,10 +73,9 @@ public class CopiasSeguridadController {
     }
 
     @FXML
-    private void cerrarVentana() {
-        Stage stage = (Stage) txtRuta.getScene().getWindow();
-        stage.close();
-    }
+        private void regresarMenu() throws IOException {
+        App.setRoot("menu_principal"); // nombre de tu FXML del menú
+}
 
     //  ALERTAS
     private void mostrarAlerta(String mensaje) {

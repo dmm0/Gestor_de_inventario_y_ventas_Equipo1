@@ -5,6 +5,7 @@
 package controladores;
 
 import conexion.Conexion;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -202,9 +203,10 @@ public class AdminUsuariosController implements Initializable {
     }
 
     @FXML
-    private void regresarMenu() {
-        ((Stage) table_Usuarios.getScene().getWindow()).close();
-    }
+    
+        private void regresarMenu() throws IOException {
+        App.setRoot("menu_principal"); // nombre de tu FXML del menú
+}
 
     // =========================
     // ALERTAS
