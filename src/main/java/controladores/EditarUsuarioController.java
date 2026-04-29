@@ -2,13 +2,15 @@ package controladores;
 
 import conexion.Conexion;
 import java.sql.*;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import modelos.UsuarioTabla;
 
-public class EditarUsuarioController {
+public class EditarUsuarioController implements Initializable {
 
     @FXML private TextField txtNombre, txtTelefono, txtPuesto, txtCorreo;
     @FXML private TextField txtUsuario;
@@ -18,9 +20,17 @@ public class EditarUsuarioController {
     private int idUsuario;
     private int idEmpleado;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(java.net.URL url, ResourceBundle rb) {
+
         cbRol.getItems().addAll("ADMIN", "EMPLEADO");
+
+        // Solo números en teléfono
+        txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtTelefono.setText(oldVal);
+            }
+        });
     }
 
     public void setDatos(UsuarioTabla user) {
@@ -38,95 +48,89 @@ public class EditarUsuarioController {
     @FXML
     private void actualizar() {
 
-        // VALIDAR VACÍOS
-        if (txtNombre.getText().isEmpty() ||
-            txtTelefono.getText().isEmpty() ||
-            txtPuesto.getText().isEmpty() ||
-            txtCorreo.getText().isEmpty() ||
-            txtUsuario.getText().isEmpty() ||
-            cbRol.getValue() == null) {
+        String nombre = txtNombre.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String puesto = txtPuesto.getText().trim();
+        String correo = txtCorreo.getText().trim();
+        String usuario = txtUsuario.getText().trim();
+        String password = txtPassword.getText().trim();
+        String rol = cbRol.getValue();
 
-            alerta("Error", "Todos los campos obligatorios");
+        if (nombre.isEmpty() || telefono.isEmpty() || puesto.isEmpty() ||
+            correo.isEmpty() || usuario.isEmpty() || rol == null) {
+
+            error("Todos los campos obligatorios");
             return;
         }
 
-        //  VALIDAR CORREO
-        if (!txtCorreo.getText().contains("@")) {
-            alerta("Correo inválido", "Debe contener @");
+        if (!telefono.matches("\\d{10}")) {
+            error("Teléfono inválido (10 dígitos)");
             return;
         }
 
-        //  VALIDAR USUARIO DUPLICADO
-        if (existeUsuario(txtUsuario.getText())) {
-            alerta("Error", "El usuario ya existe");
+        if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+            error("Correo inválido");
             return;
         }
 
-        //  VALIDAR PASSWORD SOLO SI SE LLENA
-        if (!txtPassword.getText().isEmpty()) {
-            if (!validarPassword(txtPassword.getText())) {
-                alerta("Contraseña inválida",
-                        "Debe tener:\n- 8 caracteres\n- Mayúscula\n- Número\n- Símbolo");
-                return;
-            }
+        if (existeUsuario(usuario)) {
+            error("El usuario ya existe");
+            return;
+        }
+
+        if (!password.isEmpty() && !validarPassword(password)) {
+            error("Contraseña inválida:\n- 8 caracteres\n- Mayúscula\n- Número\n- Símbolo");
+            return;
         }
 
         try (Connection con = Conexion.getConnection()) {
 
-            // EMPLEADO
             PreparedStatement p1 = con.prepareStatement(
                 "UPDATE empleado SET nombre=?, telefono=?, puesto=?, correo=? WHERE id_empleado=?");
 
-            p1.setString(1, txtNombre.getText());
-            p1.setString(2, txtTelefono.getText());
-            p1.setString(3, txtPuesto.getText());
-            p1.setString(4, txtCorreo.getText());
+            p1.setString(1, nombre);
+            p1.setString(2, telefono);
+            p1.setString(3, puesto);
+            p1.setString(4, correo);
             p1.setInt(5, idEmpleado);
             p1.executeUpdate();
 
-            // USUARIO
-            String sqlUsuario;
-
             PreparedStatement p2;
 
-            if (!txtPassword.getText().isEmpty()) {
-
-            p2 = con.prepareStatement(
-            "UPDATE usuario SET usuario=?, password=?, rol=? WHERE id_usuario=?");
-
-                 p2.setString(1, txtUsuario.getText());
-                 p2.setString(2, txtPassword.getText());
-                 p2.setString(3, cbRol.getValue());
-                 p2.setInt(4, idUsuario);
-
-            }               else {
-
+            if (!password.isEmpty()) {
                 p2 = con.prepareStatement(
-                 "UPDATE usuario SET usuario=?, rol=? WHERE id_usuario=?");
+                    "UPDATE usuario SET usuario=?, password=?, rol=? WHERE id_usuario=?");
 
-                p2.setString(1, txtUsuario.getText());
-                 p2.setString(2, cbRol.getValue());
+                p2.setString(1, usuario);
+                p2.setString(2, password);
+                p2.setString(3, rol);
+                p2.setInt(4, idUsuario);
+
+            } else {
+                p2 = con.prepareStatement(
+                    "UPDATE usuario SET usuario=?, rol=? WHERE id_usuario=?");
+
+                p2.setString(1, usuario);
+                p2.setString(2, rol);
                 p2.setInt(3, idUsuario);
-}
+            }
 
-                p2.executeUpdate();
+            p2.executeUpdate();
 
-            alerta("Éxito", "Usuario actualizado");
+            exito("Usuario actualizado correctamente");
             cerrar();
 
         } catch (Exception e) {
             e.printStackTrace();
-            alerta("Error", "No se pudo actualizar");
+            error("No se pudo actualizar");
         }
     }
 
-    //  VALIDAR PASSWORD
     private boolean validarPassword(String password) {
         String regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$";
         return Pattern.matches(regex, password);
     }
 
-    //  VALIDAR DUPLICADO
     private boolean existeUsuario(String usuario) {
         String sql = "SELECT * FROM usuario WHERE usuario=? AND id_usuario<>?";
 
@@ -144,11 +148,17 @@ public class EditarUsuarioController {
         }
     }
 
-    private void alerta(String t, String m) {
+    private void error(String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setHeaderText("Error");
+        a.setContentText(msg);
+        a.showAndWait();
+    }
+
+    private void exito(String msg) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(t);
-        a.setHeaderText(null);
-        a.setContentText(m);
+        a.setHeaderText("Éxito");
+        a.setContentText(msg);
         a.showAndWait();
     }
 

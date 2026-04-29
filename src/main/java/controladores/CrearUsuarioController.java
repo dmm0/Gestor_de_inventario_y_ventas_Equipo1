@@ -22,71 +22,71 @@ public class CrearUsuarioController {
     @FXML
     private void guardarUsuario() {
 
-        // VALIDAR CAMPOS VACÍOS
-        if (txtNombre.getText().isEmpty() ||
-            txtTelefono.getText().isEmpty() ||
-            txtPuesto.getText().isEmpty() ||
-            txtCorreo.getText().isEmpty() ||
-            txtUsuario.getText().isEmpty() ||
-            txtPassword.getText().isEmpty() ||
-            txtRol.getValue() == null) {
+        String nombre = txtNombre.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String puesto = txtPuesto.getText().trim();
+        String correo = txtCorreo.getText().trim();
+        String usuario = txtUsuario.getText().trim();
+        String password = txtPassword.getText().trim();
+        String rol = txtRol.getValue();
 
-            mostrarAlerta("Error", "Todos los campos son obligatorios");
+        if (nombre.isEmpty() || telefono.isEmpty() || puesto.isEmpty() ||
+            correo.isEmpty() || usuario.isEmpty() || password.isEmpty() || rol == null) {
+
+            error("Todos los campos son obligatorios");
             return;
         }
 
-        // VALIDAR CONTRASEÑA SEGURA
-        if (!validarPassword(txtPassword.getText())) {
-            mostrarAlerta("Contraseña inválida",
-                    "Debe tener:\n- 8 caracteres\n- 1 mayúscula\n- 1 número\n- 1 símbolo");
+        if (!telefono.matches("\\d{10}")) {
+            error("Teléfono inválido (10 dígitos)");
             return;
         }
 
-        //  VALIDAR CORREO
-        if (!txtCorreo.getText().contains("@")) {
-            mostrarAlerta("Correo inválido", "Debe contener @");
+        if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
+            error("Correo inválido");
             return;
         }
 
-        //  VALIDAR USUARIO DUPLICADO
-        if (existeUsuario(txtUsuario.getText())) {
-            mostrarAlerta("Error", "El usuario ya existe");
+        if (!validarPassword(password)) {
+            error("Contraseña inválida:\n- 8 caracteres\n- Mayúscula\n- Número\n- Símbolo");
+            return;
+        }
+
+        if (existeUsuario(usuario)) {
+            error("El usuario ya existe");
             return;
         }
 
         try (Connection con = Conexion.getConnection()) {
 
-            // EMPLEADO
             PreparedStatement ps1 = con.prepareStatement(
                 "INSERT INTO empleado(nombre, telefono, puesto, correo) VALUES (?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS);
 
-            ps1.setString(1, txtNombre.getText());
-            ps1.setString(2, txtTelefono.getText());
-            ps1.setString(3, txtPuesto.getText());
-            ps1.setString(4, txtCorreo.getText());
+            ps1.setString(1, nombre);
+            ps1.setString(2, telefono);
+            ps1.setString(3, puesto);
+            ps1.setString(4, correo);
             ps1.executeUpdate();
 
             ResultSet rs = ps1.getGeneratedKeys();
             rs.next();
             int idEmpleado = rs.getInt(1);
 
-            // USUARIO
             PreparedStatement ps2 = con.prepareStatement(
                 "INSERT INTO usuario(empleado_id_empleado, usuario, password, rol) VALUES (?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS);
 
             ps2.setInt(1, idEmpleado);
-            ps2.setString(2, txtUsuario.getText());
-            ps2.setString(3, txtPassword.getText());
-            ps2.setString(4, txtRol.getValue());;
+            ps2.setString(2, usuario);
+            ps2.setString(3, password);
+            ps2.setString(4, rol);
             ps2.executeUpdate();
 
             ResultSet rs2 = ps2.getGeneratedKeys();
             rs2.next();
             int idUsuario = rs2.getInt(1);
 
-            // PERMISOS
             PreparedStatement ps3 = con.prepareStatement(
                 "INSERT INTO permisos(usuario_id_usuario, tipo_permiso, descripcion) VALUES (?, ?, ?)");
 
@@ -95,23 +95,20 @@ public class CrearUsuarioController {
             ps3.setString(3, txtDescripcion.getText());
             ps3.executeUpdate();
 
-            mostrarAlerta("Éxito", "Usuario creado correctamente");
-
+            exito("Usuario creado correctamente");
             cerrarVentana();
 
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo guardar");
+            error("No se pudo guardar");
         }
     }
 
-    // VALIDAR PASSWORD
     private boolean validarPassword(String password) {
         String regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$";
         return Pattern.matches(regex, password);
     }
 
-    //  VALIDAR USUARIO EXISTENTE
     private boolean existeUsuario(String usuario) {
         String sql = "SELECT * FROM usuario WHERE usuario=?";
 
@@ -127,16 +124,20 @@ public class CrearUsuarioController {
         }
     }
 
-    //  ALERTAS BONITAS
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    private void error(String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setHeaderText("Error");
+        a.setContentText(msg);
+        a.showAndWait();
     }
 
-    // CERRAR VENTANA
+    private void exito(String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setHeaderText("Éxito");
+        a.setContentText(msg);
+        a.showAndWait();
+    }
+
     private void cerrarVentana() {
         Stage stage = (Stage) txtNombre.getScene().getWindow();
         stage.close();

@@ -14,7 +14,6 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import modelos.UsuarioTabla;
@@ -66,7 +65,6 @@ public class AdminUsuariosController implements Initializable {
                     eliminarUsuario(user);
                 });
 
-                // (Opcional diseño)
                 btnEditar.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
                 btnEliminar.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
             }
@@ -74,12 +72,7 @@ public class AdminUsuariosController implements Initializable {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(box);
-                }
+                setGraphic(empty ? null : box);
             }
         });
     }
@@ -122,9 +115,15 @@ public class AdminUsuariosController implements Initializable {
     }
 
     // =========================
-    // ELIMINAR
+    // ELIMINAR (CON CONFIRMACIÓN)
     // =========================
     private void eliminarUsuario(UsuarioTabla user) {
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setHeaderText("Confirmar eliminación");
+        confirm.setContentText("¿Eliminar usuario: " + user.getUsuario() + "?");
+
+        if (confirm.showAndWait().get() != ButtonType.OK) return;
 
         try (Connection con = Conexion.getConnection()) {
 
@@ -143,10 +142,12 @@ public class AdminUsuariosController implements Initializable {
             p3.setInt(1, user.getIdEmpleado());
             p3.executeUpdate();
 
+            exito("Usuario eliminado");
             cargarUsuarios();
 
         } catch (Exception e) {
             e.printStackTrace();
+            error("No se pudo eliminar");
         }
     }
 
@@ -164,10 +165,15 @@ public class AdminUsuariosController implements Initializable {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+
+            //  Recargar al cerrar
+            stage.setOnHidden(e -> cargarUsuarios());
+
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
+            error("No se pudo abrir edición");
         }
     }
 
@@ -178,16 +184,42 @@ public class AdminUsuariosController implements Initializable {
     private void crearUsuario() {
 
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/forms/CrearUsuario.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/CrearUsuario.fxml"));
+            Parent root = loader.load();
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+
+            //  Recargar al cerrar
+            stage.setOnHidden(e -> cargarUsuarios());
+
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
+            error("No se pudo abrir formulario");
         }
     }
 
     @FXML
-    private void regresarMenu() {}
+    private void regresarMenu() {
+        ((Stage) table_Usuarios.getScene().getWindow()).close();
+    }
+
+    // =========================
+    // ALERTAS
+    // =========================
+    private void error(String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setHeaderText("Error");
+        a.setContentText(msg);
+        a.showAndWait();
+    }
+
+    private void exito(String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setHeaderText("Éxito");
+        a.setContentText(msg);
+        a.showAndWait();
+    }
 }
