@@ -20,9 +20,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import modelos.Producto;
+
 /**
  * FXML Controller class
  *
@@ -30,11 +33,18 @@ import modelos.Producto;
  */
 public class RegistrarVentaController implements Initializable {
 
-
     @FXML
     private TextField textField_buscar;
     @FXML
-    private TableView<?> table_productos;
+    private TableView<Producto> table_productos;
+    @FXML
+    private TableColumn<Producto, Integer> col_id_producto;
+    @FXML
+    private TableColumn<Producto, String> col_producto;
+    @FXML
+    private TableColumn<Producto, Integer> col_stock;
+    @FXML
+    private TableColumn<Producto, Integer> col_precio;
     @FXML
     private Button btn_finVenta;
     @FXML
@@ -47,14 +57,21 @@ public class RegistrarVentaController implements Initializable {
     private Button btn_generarNotaRemision;
     @FXML
     private Button btn_solicitarFactura;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+
+        col_id_producto.setCellValueFactory(new PropertyValueFactory<>("id_productos"));
+        col_producto.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        col_stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        col_precio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+
+        cargarProductos();
+    }
+
     @FXML
     private void btn_finalizarVenta(ActionEvent event) {
     }
@@ -74,30 +91,27 @@ public class RegistrarVentaController implements Initializable {
     @FXML
     private void solicitarFactura(ActionEvent event) {
     }
-    
-    
+
     private void cargarProductos() {
         ObservableList<Producto> list = FXCollections.observableArrayList();
-        
+
         String sql = "SELECT p.id_productos, p.nombre, p.stock, p.precio FROM Productos p ";
 
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
 
                 list.add(new Producto(
-                    rs.getInt("id_productos"),
-                    rs.getString("nombre"),
-                    rs.getInt("stock"),
-                    rs.getInt("precio")
+                        rs.getInt("id_productos"),
+                        rs.getString("nombre"),
+                        rs.getInt("stock"),
+                        rs.getInt("precio")
                 ));
             }
 
             table_productos.setItems(list);
-            
-    }   catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(RegistrarVentaController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
