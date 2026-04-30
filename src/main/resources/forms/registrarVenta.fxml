@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="forms.RegistrarVentaController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="434.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="166.0" />
@@ -29,10 +29,10 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <TextField alignment="CENTER" promptText="Buscar" />
+            <TextField fx:id="textField_buscar" alignment="CENTER" promptText="Buscar" />
             <ScrollPane prefHeight="200.0" prefWidth="200.0">
                <content>
-                  <TableView editable="true" prefHeight="170.0" prefWidth="396.0">
+                  <TableView fx:id="table_productos" editable="true" prefHeight="170.0" prefWidth="396.0">
                     <columns>
                       <TableColumn prefWidth="75.0" text="Producto" />
                       <TableColumn prefWidth="75.0" text="Stock" />
@@ -54,8 +54,8 @@
             <Label text="IVA:" />
             <Label text="Total:" />
             <Separator prefWidth="200.0" />
-            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Finalizar Venta" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Cancelar operación" />
+            <Button fx:id="btn_finVenta" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_finalizarVenta" text="Finalizar Venta" />
+            <Button fx:id="btn_cancelarOperacion" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_cancelarOp" text="Cancelar operación" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -66,7 +66,7 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <TableView prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="table_ventaActual" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="Código" />
                 <TableColumn prefWidth="75.0" text="Descripción" />
@@ -81,13 +81,13 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" text="Imprimir ticket">
+                  <Button fx:id="btn_imprimirTicket" mnemonicParsing="false" onAction="#imprimirTicket" text="Imprimir ticket">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Generar Nota Remisión" />
-                  <Button mnemonicParsing="false" text="Solicitar factura" />
+                  <Button fx:id="btn_generarNotaRemision" mnemonicParsing="false" onAction="#generarNota" text="Generar Nota Remisión" />
+                  <Button fx:id="btn_solicitarFactura" mnemonicParsing="false" onAction="#solicitarFactura" text="Solicitar factura" />
                </children>
             </HBox>
          </children>

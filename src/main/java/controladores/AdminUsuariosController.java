@@ -87,7 +87,7 @@ public class AdminUsuariosController implements Initializable {
 
         String sql = "SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.rol, " +
                      "e.telefono, e.puesto, e.correo " +
-                     "FROM usuario u " +
+                     "FROM Usuarios u " +
                      "INNER JOIN empleado e ON u.id_empleado = e.id_empleado";
 
         try (Connection con = Conexion.getConnection();
