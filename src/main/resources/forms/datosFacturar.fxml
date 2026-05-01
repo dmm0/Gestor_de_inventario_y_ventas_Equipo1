@@ -13,28 +13,22 @@
     <children>
 
         <!-- HEADER -->
-        <HBox style="-fx-background-color: #B7E1EB;" spacing="10">
+        <HBox spacing="10" style="-fx-background-color: #B7E1EB;">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
             <children>
-
-                <!-- BOTÓN REGRESAR -->
                 <Button text="← Menú"
                         onAction="#regresarMenu"
                         style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-<Separator/>
+      <Separator/>
                 <Label text="Solicitud de Factura">
-                    <font>
-                        <Font size="18.0"/>
-                    </font>
+                    <font><Font size="18"/></font>
                 </Label>
-
             </children>
         </HBox>
 
-        <!-- CONTENIDO -->
         <ScrollPane fitToWidth="true">
             <content>
                 <VBox spacing="15">
@@ -42,74 +36,41 @@
                         <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
 
-                    <!-- Datos venta -->
-                    <HBox>
-                        <children>
-                            <VBox>
-                                <Label text="Venta Asociada"/>
-                                <Label text="Venta 0000"/>
-                            </VBox>
-
-                            <VBox>
-                                <Label text="Monto Total"/>
-                                <Label text="MXN 000.00"/>
-                                <HBox.margin>
-                                    <Insets left="350"/>
-                                </HBox.margin>
-                            </VBox>
-                        </children>
-                    </HBox>
-
                     <Label text="Datos Fiscales del Cliente"/>
 
-                    <!-- RFC -->
                     <VBox>
                         <Label text="RFC *"/>
-                        <HBox spacing="10">
-                            <TextField fx:id="txtRFC" promptText="MAXX000000XXX"/>
-                            <Button text="Validar RFC" onAction="#validarRFC"/>
-                        </HBox>
+                        <TextField fx:id="txtRFC"/>
                     </VBox>
 
-                    <!-- Nombre -->
                     <VBox>
-                        <Label text="Nombre / Razón Social *"/>
+                        <Label text="Nombre *"/>
                         <TextField fx:id="txtNombre"/>
                     </VBox>
 
-                    <!-- Régimen -->
+                    <VBox>
+                        <Label text="Correo *"/>
+                        <TextField fx:id="txtCorreo"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Dirección *"/>
+                        <TextField fx:id="txtDireccion"/>
+                    </VBox>
+
                     <VBox>
                         <Label text="Régimen Fiscal *"/>
                         <ComboBox fx:id="cbRegimen"/>
                     </VBox>
 
-                    <!-- Uso CFDI -->
                     <VBox>
-                        <Label text="Uso de CFDI *"/>
+                        <Label text="Uso CFDI *"/>
                         <ComboBox fx:id="cbUsoCFDI"/>
                     </VBox>
 
-                    <!-- CP -->
-                    <VBox>
-                        <Label text="Código Postal *"/>
-                        <TextField fx:id="txtCP"/>
-                    </VBox>
-
-                    <!-- Correo -->
-                    <VBox>
-                        <Label text="Correo Electrónico *"/>
-                        <TextField fx:id="txtCorreo"/>
-                    </VBox>
-
-                    <!-- BOTONES -->
-                    <HBox spacing="20">
-                        <children>
-                            <Button text="Guardar datos"
-                                    onAction="#guardarDatos"
-                                    style="-fx-background-color: #A3E0E6; -fx-font-weight: bold;"/>
-
-                      
-                        </children>
+                    <HBox spacing="10">
+                        <Button text="Guardar" onAction="#guardarDatos"/>
+                        <Button text="Limpiar" onAction="#cancelar"/>
                     </HBox>
 
                 </VBox>
