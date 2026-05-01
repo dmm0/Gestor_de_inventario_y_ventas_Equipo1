@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fitToWidth="true"
+<ScrollPane fitToWidth="true" prefHeight="500.0" prefWidth="350.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controladores.CrearUsuarioController">
@@ -12,43 +12,40 @@
     <content>
         <VBox spacing="12">
 
+            <!-- Aumentamos el padding inferior a 30 para que no se corten los botones -->
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="20" right="20" bottom="30" left="20"/>
             </padding>
 
             <Label text="Crear Usuario" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
 
-            <!-- EMPLEADO -->
+            <!-- SECCIÓN EMPLEADO -->
             <Label text="Datos del Empleado" style="-fx-font-weight:bold;"/>
-
             <Label text="Nombre"/>
             <TextField fx:id="txtNombre"/>
-
             <Label text="Teléfono"/>
             <TextField fx:id="txtTelefono"/>
-
             <Label text="Puesto"/>
             <TextField fx:id="txtPuesto"/>
-
             <Label text="Correo"/>
             <TextField fx:id="txtCorreo"/>
 
-            <!-- USUARIO -->
-            <Label text="Datos de Usuario" style="-fx-font-weight:bold;"/>
+            <Separator/>
 
+            <!-- SECCIÓN USUARIO -->
+            <Label text="Datos de Usuario" style="-fx-font-weight:bold;"/>
             <Label text="Usuario"/>
             <TextField fx:id="txtUsuario"/>
-
             <Label text="Contraseña"/>
             <PasswordField fx:id="txtPassword"/>
-
             <Label text="Estado"/>
-            <ComboBox fx:id="cbEstado"/>
+            <ComboBox fx:id="cbEstado" maxWidth="1.7976931348623157E308"/>
 
-            <!-- ROLES -->
+            <Separator/>
+
+            <!-- SECCIÓN ROLES -->
             <Label text="Roles" style="-fx-font-weight:bold;"/>
-
-            <VBox fx:id="boxRoles" spacing="5">
+            <VBox fx:id="boxRoles" spacing="8">
                 <CheckBox text="Registrar Ventas"/>
                 <CheckBox text="Generar Cotizacion"/>
                 <CheckBox text="Datos para Facturar"/>
@@ -57,10 +54,16 @@
                 <CheckBox text="Copias de Seguridad"/>
             </VBox>
 
-            <HBox spacing="10">
-    <Button text="Guardar Usuario" onAction="#guardarUsuario" 
-            style="-fx-background-color: #A3E0E6; -fx-font-weight: bold; -fx-cursor: hand;"/>
-</HBox>
+            <Separator/>
+
+            <!-- BOTONES FIJOS -->
+            
+                    <HBox alignment="CENTER_RIGHT" spacing="15" 
+          style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-color: #dee2e6; -fx-border-width: 1 0 0 0;">
+        <Button onAction="#guardarUsuario" 
+                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;" 
+                text="Guardar Usuario" />
+    </HBox>
 
         </VBox>
     </content>
