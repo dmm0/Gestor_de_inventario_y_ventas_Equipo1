@@ -4,10 +4,11 @@ module com.mycompany.ingsoftware {
     requires java.sql;
     requires java.desktop; // Para iconos o componentes AWT si los usas
     requires java.base;
-    
+    requires itextpdf;
     // Abrir el paquete de controladores para que JavaFX pueda leerlos
     opens controladores to javafx.fxml;
     
     // Exportar el paquete para que sea accesible
     exports controladores;
+    requires mcpdf;
 }

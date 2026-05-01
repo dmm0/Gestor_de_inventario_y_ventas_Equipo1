@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" prefWidth="500" prefHeight="400" style="-fx-background-color: #F0F8FA;" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.BuscarProductoController">
+    <children>
+        <Label text="Seleccionar Producto" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+        <HBox spacing="10">
+            <children>
+                <TextField fx:id="txtFiltro" promptText="Escribe el nombre del producto..." HBox.hgrow="ALWAYS" onKeyReleased="#filtrarProductos" />
+            </children>
+        </HBox>
+        <TableView fx:id="tablaBusqueda" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colNombre" text="Producto" prefWidth="250" />
+                <TableColumn fx:id="colPrecio" text="Precio" prefWidth="100" />
+                <TableColumn fx:id="colStock" text="Stock" prefWidth="100" />
+            </columns>
+        </TableView>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <children>
+                <Button text="Cancelar" onAction="#cerrar" style="-fx-background-color: #FFB3B3;" />
+                <Button text="Agregar a Cotización" onAction="#seleccionar" style="-fx-background-color: #A3E0E6;" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+</VBox>

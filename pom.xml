@@ -37,7 +37,12 @@
          <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
-        
+        <dependency>
+            <groupId>aero.m-click</groupId>
+            <artifactId>mcpdf</artifactId>
+            <version>0.2.10</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
