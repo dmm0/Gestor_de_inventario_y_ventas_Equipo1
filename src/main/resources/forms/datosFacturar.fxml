@@ -24,18 +24,12 @@
                 <Button text="← Menú"
                         onAction="#regresarMenu"
                         style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-
+<Separator/>
                 <Label text="Solicitud de Factura">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Label>
-
-                <Button text="X" onAction="#cancelar">
-                    <HBox.margin>
-                        <Insets left="250"/>
-                    </HBox.margin>
-                </Button>
 
             </children>
         </HBox>
@@ -114,9 +108,7 @@
                                     onAction="#guardarDatos"
                                     style="-fx-background-color: #A3E0E6; -fx-font-weight: bold;"/>
 
-                            <Button text="Cancelar"
-                                    onAction="#cancelar"
-                                    style="-fx-background-color: #FFCCCC;"/>
+                      
                         </children>
                     </HBox>
 

@@ -14,6 +14,7 @@
       <Button text="← Menú"
                         onAction="#regresarMenu"
                         style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+      <Separator/>
       <HBox style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Administración de Usuarios">
