@@ -60,41 +60,42 @@ public class AdminUsuariosController implements Initializable {
 
 
     private void cargarUsuarios() {
-        listaUsuarios.clear();
+    listaUsuarios.clear();
 
-        try (Connection con = Conexion.getConnection()) {
+    try (Connection con = Conexion.getConnection()) {
+        // Query exacto extraído de image_b85177.png
+        String sql = """
+            SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.estado,
+                   e.telefono, e.puesto, e.correo, u.rol
+            FROM Usuarios u
+            INNER JOIN Empleados e
+            ON u.id_empleado = e.id_empleado
+        """;
 
-            String sql = """
-                SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.estado,
-                       e.telefono, e.puesto, e.correo, u.rol
-                FROM usuario u
-                JOIN empleado e ON u.empleado_id_empleado = e.id_empleado
-            """;
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                listaUsuarios.add(new UsuarioTabla(
-                        rs.getInt("id_usuario"),
-                        rs.getInt("id_empleado"),
-                        rs.getString("usuario"),
-                        rs.getString("nombre"),
-                        rs.getString("estado"),
-                        rs.getString("telefono"),
-                        rs.getString("puesto"),
-                        rs.getString("correo"),
-                        rs.getString("rol")
-                ));
-            }
-
-            table_Usuarios.setItems(listaUsuarios);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            listaUsuarios.add(new UsuarioTabla(
+                    rs.getInt("id_usuario"),
+                    rs.getInt("id_empleado"),
+                    rs.getString("usuario"),
+                    rs.getString("nombre"),
+                    rs.getString("estado"),
+                    rs.getString("telefono"),
+                    rs.getString("puesto"),
+                    rs.getString("correo"),
+                    rs.getString("rol")
+            ));
         }
-        System.out.println("Registros cargados: " + listaUsuarios.size());
+
+        table_Usuarios.setItems(listaUsuarios);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    
+}
 
     private void agregarBotones() {
         colAcciones.setCellFactory(param -> new TableCell<>() {

@@ -1,69 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fitToWidth="true"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controladores.EditarUsuarioController">
+<VBox prefHeight="600.0" prefWidth="450.0" spacing="0" 
+      xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="controladores.EditarUsuarioController">
 
-    <content>
-        <VBox spacing="12">
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox spacing="12">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
 
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+                <Label style="-fx-font-size:18px; -fx-font-weight:bold;" text="Editar Perfil de Usuario" />
 
-            <Label text="Editar Usuario" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+                <Label style="-fx-font-weight:bold;" text="Información Personal (Empleado)" />
+                <Label text="Nombre Completo" />
+                <TextField fx:id="txtNombre" />
+                <Label text="Teléfono de Contacto" />
+                <TextField fx:id="txtTelefono" />
+                <Label text="Puesto / Cargo" />
+                <TextField fx:id="txtPuesto" />
+                <Label text="Correo Electrónico" />
+                <TextField fx:id="txtCorreo" />
 
-            <!-- EMPLEADO -->
-            <Label text="Datos del Empleado" style="-fx-font-weight:bold;"/>
+                <Separator />
 
-            <Label text="Nombre"/>
-            <TextField fx:id="txtNombre"/>
+                <Label style="-fx-font-weight:bold;" text="Credenciales de Sistema" />
+                <Label text="Nombre de Usuario" />
+                <TextField fx:id="txtUsuario" />
+                <Label text="Estado de Cuenta" />
+                <ComboBox fx:id="cbEstado" maxWidth="Infinity" />
 
-            <Label text="Teléfono"/>
-            <TextField fx:id="txtTelefono"/>
+                <Separator />
 
-            <Label text="Puesto"/>
-            <TextField fx:id="txtPuesto"/>
+                <Label style="-fx-font-weight:bold;" text="Permisos y Roles" />
+                <VBox fx:id="boxRoles" spacing="8">
+                    <CheckBox text="Registrar Ventas" />
+                    <CheckBox text="Generar Cotización" />
+                    <CheckBox text="Datos para Facturar" />
+                    <CheckBox text="Administración de Usuarios" />
+                    <CheckBox text="Gestionar Inventario" />
+                    <CheckBox text="Copias de Seguridad" />
+                </VBox>
 
-            <Label text="Correo"/>
-            <TextField fx:id="txtCorreo"/>
+                <Separator />
 
-            <!-- USUARIO -->
-            <Label text="Datos de Usuario" style="-fx-font-weight:bold;"/>
-
-            <Label text="Usuario"/>
-            <TextField fx:id="txtUsuario"/>
-
-            <Label text="Estado"/>
-            <ComboBox fx:id="cbEstado"/>
-
-            <!-- ROLES -->
-            <Label text="Roles" style="-fx-font-weight:bold;"/>
-
-            <VBox fx:id="boxRoles" spacing="5">
-                <CheckBox text="Registrar Ventas"/>
-                <CheckBox text="Generar Cotizacion"/>
-                <CheckBox text="Datos para Facturar"/>
-                <CheckBox text="Administración de Usuarios"/>
-                <CheckBox text="Gestionar Inventario"/>
-                <CheckBox text="Copias de Seguridad"/>
+                <Label text="Actualizar Contraseña (Dejar en blanco para no cambiar)" />
+                <PasswordField fx:id="txtPassword" />
             </VBox>
+        </content>
+    </ScrollPane>
 
-            <!-- CONTRASEÑA -->
-            <Label text="Nueva Contraseña (Opcional)"/>
-            <PasswordField fx:id="txtPassword"/>
+    <HBox alignment="CENTER_RIGHT" spacing="15" 
+          style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-border-color: #dee2e6; -fx-border-width: 1 0 0 0;">
+        <Button onAction="#actualizar" 
+                style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;" 
+                text="Guardar Cambios" />
+    </HBox>
 
-            <!-- BOTONES -->
-            <HBox spacing="10">
-                <Button text="Actualizar" onAction="#actualizar"/>
-            </HBox>
-
-        </VBox>
-    </content>
-
-</ScrollPane>
+</VBox>
