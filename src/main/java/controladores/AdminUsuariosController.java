@@ -9,15 +9,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.*;
 import javafx.fxml.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import modelos.UsuarioTabla;
+import javafx.beans.property.SimpleStringProperty;
 
 public class AdminUsuariosController implements Initializable {
 
@@ -27,33 +27,80 @@ public class AdminUsuariosController implements Initializable {
     @FXML private TableColumn<UsuarioTabla, String> colEstado;
     @FXML private TableColumn<UsuarioTabla, Void> colAcciones;
 
+    private ObservableList<UsuarioTabla> listaUsuarios = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        colUsuario.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getUsuario()));
-
-        colNombre.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getNombre()));
-
-        colEstado.setCellValueFactory(data ->
-            new SimpleStringProperty(data.getValue().getRol()));
+        colUsuario.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsuario()));
+        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombre()));
+        colEstado.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEstado()));
 
         agregarBotones();
         cargarUsuarios();
     }
 
-    // =========================
-    // BOTONES EDITAR / ELIMINAR
-    // =========================
-    private void agregarBotones() {
+    @FXML
+    private void crearUsuario() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/CrearUsuario.fxml"));
+            Parent root = loader.load();
 
-        colAcciones.setCellFactory(col -> new TableCell<>() {
+            Stage stage = new Stage();
+            stage.setTitle("Crear Usuario");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void cargarUsuarios() {
+        listaUsuarios.clear();
+
+        try (Connection con = Conexion.getConnection()) {
+
+            String sql = """
+                SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.estado,
+                       e.telefono, e.puesto, e.correo, u.rol
+                FROM usuario u
+                JOIN empleado e ON u.empleado_id_empleado = e.id_empleado
+            """;
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                listaUsuarios.add(new UsuarioTabla(
+                        rs.getInt("id_usuario"),
+                        rs.getInt("id_empleado"),
+                        rs.getString("usuario"),
+                        rs.getString("nombre"),
+                        rs.getString("estado"),
+                        rs.getString("telefono"),
+                        rs.getString("puesto"),
+                        rs.getString("correo"),
+                        rs.getString("rol")
+                ));
+            }
+
+            table_Usuarios.setItems(listaUsuarios);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Registros cargados: " + listaUsuarios.size());
+    }
+
+    private void agregarBotones() {
+        colAcciones.setCellFactory(param -> new TableCell<>() {
 
             private final Button btnEditar = new Button("Editar");
             private final Button btnEliminar = new Button("Eliminar");
-
-            private final HBox box = new HBox(10, btnEditar, btnEliminar);
 
             {
                 btnEditar.setOnAction(e -> {
@@ -65,98 +112,21 @@ public class AdminUsuariosController implements Initializable {
                     UsuarioTabla user = getTableView().getItems().get(getIndex());
                     eliminarUsuario(user);
                 });
-
-                btnEditar.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                btnEliminar.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : box);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new HBox(5, btnEditar, btnEliminar));
+                }
             }
         });
     }
 
-    // =========================
-    // CARGAR USUARIOS
-    // =========================
-    private void cargarUsuarios() {
-
-        ObservableList<UsuarioTabla> lista = FXCollections.observableArrayList();
-
-        String sql = "SELECT u.id_usuario, e.id_empleado, u.usuario, e.nombre, u.rol, " +
-                     "e.telefono, e.puesto, e.correo " +
-                     "FROM Usuarios u " +
-                     "INNER JOIN empleado e ON u.id_empleado = e.id_empleado";
-
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-
-                lista.add(new UsuarioTabla(
-                    rs.getInt("id_usuario"),
-                    rs.getInt("id_empleado"),
-                    rs.getString("usuario"),
-                    rs.getString("nombre"),
-                    rs.getString("rol"),
-                    rs.getString("telefono"),
-                    rs.getString("puesto"),
-                    rs.getString("correo")
-                ));
-            }
-
-            table_Usuarios.setItems(lista);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // =========================
-    // ELIMINAR (CON CONFIRMACIÓN)
-    // =========================
-    private void eliminarUsuario(UsuarioTabla user) {
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setHeaderText("Confirmar eliminación");
-        confirm.setContentText("¿Eliminar usuario: " + user.getUsuario() + "?");
-
-        if (confirm.showAndWait().get() != ButtonType.OK) return;
-
-        try (Connection con = Conexion.getConnection()) {
-
-            PreparedStatement p1 = con.prepareStatement(
-                "DELETE FROM permisos WHERE usuario_id_usuario=?");
-            p1.setInt(1, user.getIdUsuario());
-            p1.executeUpdate();
-
-            PreparedStatement p2 = con.prepareStatement(
-                "DELETE FROM usuario WHERE id_usuario=?");
-            p2.setInt(1, user.getIdUsuario());
-            p2.executeUpdate();
-
-            PreparedStatement p3 = con.prepareStatement(
-                "DELETE FROM empleado WHERE id_empleado=?");
-            p3.setInt(1, user.getIdEmpleado());
-            p3.executeUpdate();
-
-            exito("Usuario eliminado");
-            cargarUsuarios();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            error("No se pudo eliminar");
-        }
-    }
-
-    // =========================
-    // EDITAR
-    // =========================
     private void abrirEditar(UsuarioTabla user) {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/EditarUsuario.fxml"));
             Parent root = loader.load();
@@ -166,62 +136,34 @@ public class AdminUsuariosController implements Initializable {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Editar Usuario");
+            stage.showAndWait();
 
-            //  Recargar al cerrar
-            stage.setOnHidden(e -> cargarUsuarios());
-
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            error("No se pudo abrir edición");
-        }
-    }
-
-    // =========================
-    // CREAR USUARIO
-    // =========================
-    @FXML
-    private void crearUsuario() {
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/CrearUsuario.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-
-            //  Recargar al cerrar
-            stage.setOnHidden(e -> cargarUsuarios());
-
-            stage.show();
+            cargarUsuarios();
 
         } catch (Exception e) {
             e.printStackTrace();
-            error("No se pudo abrir formulario");
         }
     }
 
-    @FXML
+    private void eliminarUsuario(UsuarioTabla user) {
+        try (Connection con = Conexion.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("DELETE FROM usuario WHERE id_usuario=?");
+            ps.setInt(1, user.getIdUsuario());
+            ps.executeUpdate();
+
+            new Alert(Alert.AlertType.INFORMATION, "Usuario eliminado").show();
+
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
+   @FXML
         private void regresarMenu() throws IOException {
         App.setRoot("menu_principal"); // nombre de tu FXML del menú
 }
-
-    // =========================
-    // ALERTAS
-    // =========================
-    private void error(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText("Error");
-        a.setContentText(msg);
-        a.showAndWait();
-    }
-
-    private void exito(String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setHeaderText("Éxito");
-        a.setContentText(msg);
-        a.showAndWait();
-    }
 }

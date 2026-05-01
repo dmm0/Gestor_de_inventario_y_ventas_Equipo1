@@ -2,36 +2,68 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 
-<VBox spacing="10"
-      xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controladores.EditarUsuarioController">
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controladores.EditarUsuarioController">
 
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+    <content>
+        <VBox spacing="12">
 
-    <Label text="Editar Usuario"/>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
 
-    <!-- EMPLEADO -->
-    <Label text="Datos del Empleado"/>
-    <TextField fx:id="txtNombre" promptText="Nombre"/>
-    <TextField fx:id="txtTelefono" promptText="Teléfono"/>
-    <TextField fx:id="txtPuesto" promptText="Puesto"/>
-    <TextField fx:id="txtCorreo" promptText="Correo"/>
+            <Label text="Editar Usuario" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
 
-    <!-- USUARIO -->
-    <Label text="Datos de Usuario"/>
-    <TextField fx:id="txtUsuario" promptText="Usuario"/>
-    
-    <ComboBox fx:id="cbRol" promptText="Selecciona rol"/>
+            <!-- EMPLEADO -->
+            <Label text="Datos del Empleado" style="-fx-font-weight:bold;"/>
 
-    <!-- CONTRASEÑA -->
-    <Label text="Cambiar contraseña (opcional)"/>
-    <PasswordField fx:id="txtPassword" promptText="Nueva contraseña"/>
+            <Label text="Nombre"/>
+            <TextField fx:id="txtNombre"/>
 
-    <Button text="Actualizar" onAction="#actualizar"/>
+            <Label text="Teléfono"/>
+            <TextField fx:id="txtTelefono"/>
 
-</VBox>
+            <Label text="Puesto"/>
+            <TextField fx:id="txtPuesto"/>
+
+            <Label text="Correo"/>
+            <TextField fx:id="txtCorreo"/>
+
+            <!-- USUARIO -->
+            <Label text="Datos de Usuario" style="-fx-font-weight:bold;"/>
+
+            <Label text="Usuario"/>
+            <TextField fx:id="txtUsuario"/>
+
+            <Label text="Estado"/>
+            <ComboBox fx:id="cbEstado"/>
+
+            <!-- ROLES -->
+            <Label text="Roles" style="-fx-font-weight:bold;"/>
+
+            <VBox fx:id="boxRoles" spacing="5">
+                <CheckBox text="Registrar Ventas"/>
+                <CheckBox text="Generar Cotizacion"/>
+                <CheckBox text="Datos para Facturar"/>
+                <CheckBox text="Administración de Usuarios"/>
+                <CheckBox text="Gestionar Inventario"/>
+                <CheckBox text="Copias de Seguridad"/>
+            </VBox>
+
+            <!-- CONTRASEÑA -->
+            <Label text="Nueva Contraseña (Opcional)"/>
+            <PasswordField fx:id="txtPassword"/>
+
+            <!-- BOTONES -->
+            <HBox spacing="10">
+                <Button text="Actualizar" onAction="#actualizar"/>
+            </HBox>
+
+        </VBox>
+    </content>
+
+</ScrollPane>

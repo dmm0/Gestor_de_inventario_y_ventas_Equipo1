@@ -6,140 +6,99 @@ package controladores;
 
 import conexion.Conexion;
 import java.sql.*;
-import java.util.regex.Pattern;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CrearUsuarioController {
 
     @FXML private TextField txtNombre, txtTelefono, txtPuesto, txtCorreo;
     @FXML private TextField txtUsuario;
-    @FXML private ComboBox<String> txtRol;
     @FXML private PasswordField txtPassword;
-    @FXML private TextField txtTipoPermiso, txtDescripcion;
+    @FXML private ComboBox<String> cbEstado;
+    @FXML private VBox boxRoles;
+
+    @FXML
+    public void initialize() {
+        cbEstado.getItems().addAll("ACTIVO", "BAJA");
+    }
+
+    private boolean validar() {
+
+        if (txtNombre.getText().isEmpty() ||
+            txtUsuario.getText().isEmpty() ||
+            txtPassword.getText().isEmpty() ||
+            cbEstado.getValue() == null) {
+
+            new Alert(Alert.AlertType.ERROR, "Campos obligatorios vacíos").show();
+            return false;
+        }
+
+        if (!txtCorreo.getText().contains("@")) {
+            new Alert(Alert.AlertType.ERROR, "Correo inválido").show();
+            return false;
+        }
+
+        String pass = txtPassword.getText();
+
+        if (pass.length() < 8 ||
+            !pass.matches(".*[A-Z].*") ||
+            !pass.matches(".*[!@#$%^&*].*")) {
+
+            new Alert(Alert.AlertType.ERROR, "Contraseña débil").show();
+            return false;
+        }
+
+        return true;
+    }
 
     @FXML
     private void guardarUsuario() {
 
-        String nombre = txtNombre.getText().trim();
-        String telefono = txtTelefono.getText().trim();
-        String puesto = txtPuesto.getText().trim();
-        String correo = txtCorreo.getText().trim();
-        String usuario = txtUsuario.getText().trim();
-        String password = txtPassword.getText().trim();
-        String rol = txtRol.getValue();
-
-        if (nombre.isEmpty() || telefono.isEmpty() || puesto.isEmpty() ||
-            correo.isEmpty() || usuario.isEmpty() || password.isEmpty() || rol == null) {
-
-            error("Todos los campos son obligatorios");
-            return;
-        }
-
-        if (!telefono.matches("\\d{10}")) {
-            error("Teléfono inválido (10 dígitos)");
-            return;
-        }
-
-        if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
-            error("Correo inválido");
-            return;
-        }
-
-        if (!validarPassword(password)) {
-            error("Contraseña inválida:\n- 8 caracteres\n- Mayúscula\n- Número\n- Símbolo");
-            return;
-        }
-
-        if (existeUsuario(usuario)) {
-            error("El usuario ya existe");
-            return;
-        }
+        if (!validar()) return;
 
         try (Connection con = Conexion.getConnection()) {
 
-            PreparedStatement ps1 = con.prepareStatement(
-                "INSERT INTO empleado(nombre, telefono, puesto, correo) VALUES (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement psEmp = con.prepareStatement(
+                "INSERT INTO empleado(nombre, telefono, puesto, correo) VALUES (?,?,?,?)",
+                Statement.RETURN_GENERATED_KEYS
+            );
 
-            ps1.setString(1, nombre);
-            ps1.setString(2, telefono);
-            ps1.setString(3, puesto);
-            ps1.setString(4, correo);
-            ps1.executeUpdate();
+            psEmp.setString(1, txtNombre.getText());
+            psEmp.setString(2, txtTelefono.getText());
+            psEmp.setString(3, txtPuesto.getText());
+            psEmp.setString(4, txtCorreo.getText());
+            psEmp.executeUpdate();
 
-            ResultSet rs = ps1.getGeneratedKeys();
-            rs.next();
-            int idEmpleado = rs.getInt(1);
+            ResultSet rs = psEmp.getGeneratedKeys();
+            int idEmpleado = 0;
+            if (rs.next()) idEmpleado = rs.getInt(1);
 
-            PreparedStatement ps2 = con.prepareStatement(
-                "INSERT INTO usuario(empleado_id_empleado, usuario, password, rol) VALUES (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS);
+            String roles = "";
+            for (var node : boxRoles.getChildren()) {
+                if (node instanceof CheckBox cb && cb.isSelected()) {
+                    roles += cb.getText() + ",";
+                }
+            }
 
-            ps2.setInt(1, idEmpleado);
-            ps2.setString(2, usuario);
-            ps2.setString(3, password);
-            ps2.setString(4, rol);
-            ps2.executeUpdate();
+            PreparedStatement psUser = con.prepareStatement(
+                "INSERT INTO usuario(usuario, contraseña, estado, rol, empleado_id_empleado) VALUES (?,?,?,?,?)"
+            );
 
-            ResultSet rs2 = ps2.getGeneratedKeys();
-            rs2.next();
-            int idUsuario = rs2.getInt(1);
+            psUser.setString(1, txtUsuario.getText());
+            psUser.setString(2, txtPassword.getText());
+            psUser.setString(3, cbEstado.getValue());
+            psUser.setString(4, roles);
+            psUser.setInt(5, idEmpleado);
+            psUser.executeUpdate();
 
-            PreparedStatement ps3 = con.prepareStatement(
-                "INSERT INTO permisos(usuario_id_usuario, tipo_permiso, descripcion) VALUES (?, ?, ?)");
+            new Alert(Alert.AlertType.INFORMATION, "Usuario creado").show();
 
-            ps3.setInt(1, idUsuario);
-            ps3.setString(2, txtTipoPermiso.getText());
-            ps3.setString(3, txtDescripcion.getText());
-            ps3.executeUpdate();
-
-            exito("Usuario creado correctamente");
-            cerrarVentana();
+            ((Stage) txtNombre.getScene().getWindow()).close();
 
         } catch (Exception e) {
             e.printStackTrace();
-            error("No se pudo guardar");
         }
-    }
-
-    private boolean validarPassword(String password) {
-        String regex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$";
-        return Pattern.matches(regex, password);
-    }
-
-    private boolean existeUsuario(String usuario) {
-        String sql = "SELECT * FROM usuario WHERE usuario=?";
-
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, usuario);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
-
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private void error(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText("Error");
-        a.setContentText(msg);
-        a.showAndWait();
-    }
-
-    private void exito(String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setHeaderText("Éxito");
-        a.setContentText(msg);
-        a.showAndWait();
-    }
-
-    private void cerrarVentana() {
-        Stage stage = (Stage) txtNombre.getScene().getWindow();
-        stage.close();
     }
 }
