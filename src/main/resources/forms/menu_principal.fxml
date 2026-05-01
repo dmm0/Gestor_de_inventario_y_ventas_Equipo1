@@ -27,35 +27,42 @@
       <Separator prefWidth="200.0" />
 
       <HBox spacing="60.0">
-         <children>
-            <Button fx:id="btn_adminUsuario" onAction="#btn_menuAdmin" prefWidth="150.0" text="Administracion Usuarios" />
-            <Button fx:id="btn_registrarVenta" onAction="#btn_menuVentas" prefWidth="150.0" text="Registrar Venta" />
-            <Button fx:id="btn_generarCoti" onAction="#btn_menuCotizacion" prefWidth="150.0" text="Generar Cotizacion" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </HBox>
+    <children>
+        <Button fx:id="btn_adminUsuario" onAction="#btn_menuAdmin" prefWidth="150.0" text="Administracion Usuarios" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Button fx:id="btn_registrarVenta" onAction="#btn_menuVentas" prefWidth="150.0" text="Registrar Venta" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Button fx:id="btn_generarCoti" onAction="#btn_menuCotizacion" prefWidth="150.0" text="Generar Cotizacion" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</HBox>
 
-      <HBox spacing="60.0">
-         <children>
-            <Button fx:id="btn_gestionInv" onAction="#btn_menuInventario" prefWidth="150.0" text="Gestionar Inventario" />
-            <Button fx:id="btn_registrarEgreso" onAction="#btn_menuEgresos" prefWidth="150.0" text="Registrar Egresos" />
-            <Button fx:id="btn_copias" onAction="#btn_menuCopias" prefWidth="150.0" text="Copias Seguridad" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </HBox>
+<HBox spacing="60.0">
+    <children>
+        <Button fx:id="btn_gestionInv" onAction="#btn_menuInventario" prefWidth="150.0" text="Gestionar Inventario" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Button fx:id="btn_registrarEgreso" onAction="#btn_menuEgresos" prefWidth="150.0" text="Registrar Egresos" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Button fx:id="btn_copias" onAction="#btn_menuCopias" prefWidth="150.0" text="Copias Seguridad" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</HBox>
 
-      <HBox spacing="60.0">
-         <children>
-            <Button prefWidth="150.0" text="Datos para Facturar" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </HBox>
+<HBox spacing="60.0">
+    <children>
+        <Button prefWidth="150.0" text="Datos para Facturar" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</HBox>
 
    </children>
 </VBox>

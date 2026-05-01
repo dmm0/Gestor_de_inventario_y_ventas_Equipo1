@@ -58,8 +58,9 @@
             </VBox>
 
             <HBox spacing="10">
-                <Button text="Guardar" onAction="#guardarUsuario"/>
-            </HBox>
+    <Button text="Guardar Usuario" onAction="#guardarUsuario" 
+            style="-fx-background-color: #A3E0E6; -fx-font-weight: bold; -fx-cursor: hand;"/>
+</HBox>
 
         </VBox>
     </content>

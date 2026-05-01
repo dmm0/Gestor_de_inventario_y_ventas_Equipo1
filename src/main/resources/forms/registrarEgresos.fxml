@@ -62,10 +62,13 @@
                <Separator/>
 
                <HBox spacing="10" alignment="CENTER">
-                  <Button text="Guardar Egreso" onAction="#guardarEgreso"/>
-                  <Button text="Limpiar" onAction="#limpiarCampos"/>
-                  <Button text="Regresar al menu" onAction="#regresarMenu"/>
-               </HBox>
+    <Button text="Guardar Egreso" onAction="#guardarEgreso" 
+            style="-fx-background-color: #A3E0E6; -fx-cursor: hand; -fx-font-weight: bold;"/>
+    <Button text="Limpiar" onAction="#limpiarCampos" 
+            style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    <Button text="Regresar al menu" onAction="#regresarMenu" 
+            style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+</HBox>
 
             </VBox>
          </content>

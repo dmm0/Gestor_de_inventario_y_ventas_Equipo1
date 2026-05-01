@@ -46,8 +46,9 @@
       </HBox>
 
       <Button text="Iniciar Sesión"
-              maxWidth="1.7976931348623157E308"
-              onAction="#iniciarSesion"/>
+        maxWidth="1.7976931348623157E308"
+        onAction="#iniciarSesion"
+        style="-fx-background-color: #A3E0E6; -fx-cursor: hand; -fx-font-weight: bold;"/>
 
       <Separator prefWidth="200.0" />
 

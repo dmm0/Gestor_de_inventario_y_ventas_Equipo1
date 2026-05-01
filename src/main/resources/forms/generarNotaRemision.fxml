@@ -184,14 +184,16 @@
             <Insets top="10.0" />
          </VBox.margin>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-         <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="260.0" text="Generar Nota" />
-            <Button mnemonicParsing="false" text="Cancelar" />
-         </children>
-      </HBox>
+     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="260.0" text="Generar Nota" 
+                style="-fx-background-color: #A3E0E6; -fx-font-weight: bold; -fx-cursor: hand;" />
+        <Button mnemonicParsing="false" text="Cancelar" 
+                style="-fx-background-color: #E0E0E0; -fx-cursor: hand;" />
+    </children>
+</HBox>
    </children>
 </VBox>

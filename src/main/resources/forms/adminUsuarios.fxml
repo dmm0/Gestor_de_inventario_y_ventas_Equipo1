@@ -29,11 +29,13 @@
          <children>
             <Label text="Acciones principales"/>
             <HBox spacing="15">
-               <children>
-                  <Button fx:id="btn_crear_usuario" text="Crear Nuevo Usuario" onAction="#crearUsuario"/>
-                  <Button fx:id="btn_regresarMenu" text="Regresar al Menú" onAction="#regresarMenu"/>
-               </children>
-            </HBox>
+    <children>
+        <Button fx:id="btn_crear_usuario" text="Crear Nuevo Usuario" onAction="#crearUsuario" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Button fx:id="btn_regresarMenu" text="Regresar al Menú" onAction="#regresarMenu" 
+                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    </children>
+</HBox>
          </children>
          <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
