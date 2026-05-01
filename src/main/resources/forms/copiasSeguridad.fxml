@@ -12,6 +12,10 @@
 
    <!-- HEADER -->
    <children>
+       <Button text="← Menú"
+                        onAction="#regresarMenu"
+                        style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Separator/>
       <HBox prefHeight="41.0" style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Copias de Seguridad (Respaldo del Sistema)">
@@ -66,8 +70,6 @@
     <children>
         <Button text="Generar Copia" onAction="#generarBackup" 
                 style="-fx-background-color: #A3E0E6; -fx-font-weight: bold; -fx-cursor: hand;"/>
-        <Button text="Regresar al Menu" onAction="#regresarMenu" 
-                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
     </children>
 </HBox>
 

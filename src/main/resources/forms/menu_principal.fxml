@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.Menu_principalController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.Menu_principalController">
 
    <children>
       <HBox prefHeight="52.0" prefWidth="600.0">
@@ -56,8 +56,9 @@
 
 <HBox spacing="60.0">
     <children>
-        <Button prefWidth="150.0" text="Datos para Facturar" 
+        <Button fx:id="btn_datosFacturar" onAction="#btn_menuDatosFacturar" prefWidth="150.0" text="Datos para Facturar" 
                 style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        
     </children>
     <padding>
         <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />

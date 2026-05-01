@@ -58,4 +58,13 @@ public class Menu_principalController implements Initializable {
     private void btn_menuCopias(ActionEvent event) throws IOException {
         App.setRoot("copiasSeguridad");
     }
+    
+    @FXML
+    private void btn_menuDatosFacturar(ActionEvent event) {
+    try {
+        App.setRoot("datosFacturar");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 }

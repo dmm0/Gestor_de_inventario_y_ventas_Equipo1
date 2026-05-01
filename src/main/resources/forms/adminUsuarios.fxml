@@ -11,7 +11,9 @@
       fx:controller="controladores.AdminUsuariosController">
 
    <children>
-
+      <Button text="← Menú"
+                        onAction="#regresarMenu"
+                        style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
       <HBox style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Administración de Usuarios">
@@ -31,8 +33,6 @@
             <HBox spacing="15">
     <children>
         <Button fx:id="btn_crear_usuario" text="Crear Nuevo Usuario" onAction="#crearUsuario" 
-                style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-        <Button fx:id="btn_regresarMenu" text="Regresar al Menú" onAction="#regresarMenu" 
                 style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
     </children>
 </HBox>

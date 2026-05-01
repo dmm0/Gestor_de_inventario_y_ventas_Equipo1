@@ -10,7 +10,10 @@
       prefHeight="400.0" prefWidth="600.0">
 
    <children>
-
+      <Button text="← Menú"
+                        onAction="#regresarMenu"
+                        style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+        <Separator/>
       <HBox style="-fx-background-color: #A3E0E6;">
          <children>
             <Label text="Registrar Egreso">
@@ -66,8 +69,7 @@
             style="-fx-background-color: #A3E0E6; -fx-cursor: hand; -fx-font-weight: bold;"/>
     <Button text="Limpiar" onAction="#limpiarCampos" 
             style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-    <Button text="Regresar al menu" onAction="#regresarMenu" 
-            style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+    
 </HBox>
 
             </VBox>
