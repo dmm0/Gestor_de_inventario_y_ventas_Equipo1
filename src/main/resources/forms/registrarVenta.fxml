@@ -38,7 +38,7 @@
                       <TableColumn fx:id="col_producto" prefWidth="75.0" text="Producto" />
                       <TableColumn fx:id="col_stock" prefWidth="75.0" text="Stock" />
                         <TableColumn fx:id="col_precio" prefWidth="75.0" text="Precio" />
-                        <TableColumn fx:id="col_add" prefWidth="75.0" text="+" />
+                        <TableColumn fx:id="col_add" prefWidth="75.0" text="Accion" />
                     </columns>
                   </TableView>
                </content>
@@ -48,9 +48,9 @@
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
          <children>
             <Label text="Resumen de la venta:" />
-            <Label text="Subtotal:" />
-            <Label text="IVA:" />
-            <Label text="Total:" />
+            <Label fx:id="lbl_Subtotal" text="Subtotal:" />
+            <Label fx:id="lbl_Iva" text="IVA:" />
+            <Label fx:id="lbl_Total" text="Total:" />
             <Separator prefWidth="200.0" />
             <Button fx:id="btn_finVenta" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_finalizarVenta" text="Finalizar Venta" />
             <Button fx:id="btn_cancelarOperacion" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_cancelarOp" text="Cancelar operación" />
@@ -66,12 +66,12 @@
          <children>
             <TableView fx:id="table_ventaActual" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Código" />
-                <TableColumn prefWidth="75.0" text="Descripción" />
-                  <TableColumn prefWidth="75.0" text="Cant." />
-                  <TableColumn prefWidth="75.0" text="Precio/unidad" />
-                  <TableColumn prefWidth="75.0" text="Importe" />
-                  <TableColumn prefWidth="75.0" text="Acción" />
+                <TableColumn fx:id="col_codigo" prefWidth="75.0" text="Código" />
+                <TableColumn fx:id="col_descripcion" prefWidth="75.0" text="Descripción" />
+                  <TableColumn fx:id="col_cantidad" prefWidth="75.0" text="Cant." />
+                  <TableColumn fx:id="col_precioUnidad" prefWidth="75.0" text="Precio/unidad" />
+                  <TableColumn fx:id="col_importe" prefWidth="75.0" text="Importe" />
+                  <TableColumn fx:id="col_accion" prefWidth="75.0" text="Acción" />
               </columns>
             </TableView>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">

@@ -13,12 +13,12 @@ public class Producto {
         this.precio = precio;
     }
 
-    public int getId_producto() {
+    public int getId_productos() {
         return id_productos;
     }
 
-    public void setId_producto(int id_producto) {
-        this.id_productos = id_producto;
+    public void setId_productos(int id_productos) {
+        this.id_productos = id_productos;
     }
 
     public String getNombre() {
