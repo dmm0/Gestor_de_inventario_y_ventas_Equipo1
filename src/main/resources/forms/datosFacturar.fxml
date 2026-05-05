@@ -12,17 +12,14 @@
 
     <children>
 
-        <!-- HEADER -->
         <HBox spacing="10" style="-fx-background-color: #B7E1EB;">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
             <children>
-                <Button text="← Menú"
-                        onAction="#regresarMenu"
-                        style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-      <Separator/>
+                <Button text="← Menú" onAction="#regresarMenu"/>
+                <Separator/>
                 <Label text="Solicitud de Factura">
                     <font><Font size="18"/></font>
                 </Label>
@@ -49,6 +46,11 @@
                     </VBox>
 
                     <VBox>
+                        <Label text="Teléfono *"/>
+                        <TextField fx:id="txtTelefono"/>
+                    </VBox>
+
+                    <VBox>
                         <Label text="Correo *"/>
                         <TextField fx:id="txtCorreo"/>
                     </VBox>
@@ -56,6 +58,11 @@
                     <VBox>
                         <Label text="Dirección *"/>
                         <TextField fx:id="txtDireccion"/>
+                    </VBox>
+
+                    <VBox>
+                        <Label text="Código Postal *"/>
+                        <TextField fx:id="txtCP"/>
                     </VBox>
 
                     <VBox>

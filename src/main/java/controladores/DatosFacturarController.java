@@ -16,8 +16,10 @@ public class DatosFacturarController implements Initializable {
 
     @FXML private TextField txtRFC;
     @FXML private TextField txtNombre;
+    @FXML private TextField txtTelefono;
     @FXML private TextField txtCorreo;
     @FXML private TextField txtDireccion;
+    @FXML private TextField txtCP;
     @FXML private ComboBox<String> cbRegimen;
     @FXML private ComboBox<String> cbUsoCFDI;
 
@@ -37,59 +39,74 @@ public class DatosFacturarController implements Initializable {
             "G03 - Gastos en general",
             "P01 - Por definir"
         );
+
+        // 🔒 SOLO NÚMEROS EN TELÉFONO
+        txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtTelefono.setText(newVal.replaceAll("[^\\d]", ""));
+            }
+        });
+
+        // 🔒 SOLO NÚMEROS EN CP
+        txtCP.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal.matches("\\d*")) {
+                txtCP.setText(newVal.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     public void setIdVenta(int idVenta) {
         this.idVentaActual = idVenta;
     }
 
-    //  VALIDAR RFC
-    @FXML
-    private void validarRFC() {
-        String rfc = txtRFC.getText().trim().toUpperCase();
-
-        if (rfc.matches("[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}")) {
-            mostrarAlerta("RFC válido", Alert.AlertType.INFORMATION);
-        } else {
-            mostrarAlerta("RFC inválido", Alert.AlertType.ERROR);
-        }
-    }
-
-    //  VALIDAR EMAIL
     private boolean validarCorreo(String correo) {
         return correo.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$");
     }
 
-    //  VALIDAR CAMPOS COMPLETOS
     private boolean validarCampos() {
 
         if (txtRFC.getText().isEmpty() ||
             txtNombre.getText().isEmpty() ||
+            txtTelefono.getText().isEmpty() ||
             txtCorreo.getText().isEmpty() ||
             txtDireccion.getText().isEmpty() ||
+            txtCP.getText().isEmpty() ||
             cbRegimen.getValue() == null ||
             cbUsoCFDI.getValue() == null) {
 
-            mostrarAlerta("Completa todos los campos", Alert.AlertType.WARNING);
+            mostrarAlerta("Completa todos los campos obligatorios", Alert.AlertType.WARNING);
             return false;
         }
 
+        // RFC
         if (!txtRFC.getText().toUpperCase().matches("[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}")) {
             mostrarAlerta("RFC inválido", Alert.AlertType.ERROR);
             return false;
         }
 
+        // Teléfono
+        if (!txtTelefono.getText().matches("\\d{10}")) {
+            mostrarAlerta("Teléfono inválido (10 dígitos)", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        // Correo
         if (!validarCorreo(txtCorreo.getText())) {
             mostrarAlerta("Correo inválido", Alert.AlertType.ERROR);
+            return false;
+        }
+
+        // CP
+        if (!txtCP.getText().matches("\\d{5}")) {
+            mostrarAlerta("Código Postal inválido (5 dígitos)", Alert.AlertType.ERROR);
             return false;
         }
 
         return true;
     }
 
-    //  BUSCAR CLIENTE POR RFC
     private int obtenerIdClientePorRFC(String rfc) {
-        String sql = "SELECT ID_CLIENTE FROM CLIENTE WHERE RFC = ?";
+        String sql = "SELECT id_cliente FROM cliente WHERE rfc = ?";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -98,7 +115,7 @@ public class DatosFacturarController implements Initializable {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("ID_CLIENTE");
+                return rs.getInt("id_cliente");
             }
 
         } catch (Exception e) {
@@ -108,24 +125,25 @@ public class DatosFacturarController implements Initializable {
         return -1;
     }
 
-    //  GUARDAR O REUTILIZAR CLIENTE
     private int guardarOObtenerCliente() {
 
         int idCliente = obtenerIdClientePorRFC(txtRFC.getText());
 
         if (idCliente != -1) return idCliente;
 
-        String sql = "INSERT INTO CLIENTE (NOMBRE, RFC, CORREO, DIRECCION, REGIMEN_FISCAL, USO_CFDI) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (nombre, telefono, correo, rfc, direccion, regimen_fiscal, cp, uso_cfdi) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, txtNombre.getText());
-            ps.setString(2, txtRFC.getText());
+            ps.setString(2, txtTelefono.getText());
             ps.setString(3, txtCorreo.getText());
-            ps.setString(4, txtDireccion.getText());
-            ps.setString(5, cbRegimen.getValue());
-            ps.setString(6, cbUsoCFDI.getValue());
+            ps.setString(4, txtRFC.getText());
+            ps.setString(5, txtDireccion.getText());
+            ps.setString(6, cbRegimen.getValue());
+            ps.setString(7, txtCP.getText());
+            ps.setString(8, cbUsoCFDI.getValue());
 
             ps.executeUpdate();
 
@@ -141,10 +159,9 @@ public class DatosFacturarController implements Initializable {
         return -1;
     }
 
-    //  ASOCIAR CLIENTE A VENTA
     private void asociarClienteAVenta(int idCliente) {
 
-        String sql = "UPDATE VENTA SET ID_CLIENTE = ? WHERE ID_VENTA = ?";
+        String sql = "UPDATE venta SET id_cliente = ? WHERE id_venta = ?";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -158,7 +175,6 @@ public class DatosFacturarController implements Initializable {
         }
     }
 
-    //  BOTÓN GUARDAR (YA CON VALIDACIONES)
     @FXML
     private void guardarDatos() {
 
@@ -173,7 +189,7 @@ public class DatosFacturarController implements Initializable {
 
         asociarClienteAVenta(idCliente);
 
-        mostrarAlerta("Cliente asociado correctamente a la venta", Alert.AlertType.INFORMATION);
+        mostrarAlerta("Cliente guardado correctamente", Alert.AlertType.INFORMATION);
 
         cancelar();
     }
@@ -182,8 +198,10 @@ public class DatosFacturarController implements Initializable {
     private void cancelar() {
         txtRFC.clear();
         txtNombre.clear();
+        txtTelefono.clear();
         txtCorreo.clear();
         txtDireccion.clear();
+        txtCP.clear();
         cbRegimen.getSelectionModel().clearSelection();
         cbUsoCFDI.getSelectionModel().clearSelection();
     }
