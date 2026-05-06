@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controladores;
 
 import conexion.Conexion;
@@ -40,14 +36,14 @@ public class DatosFacturarController implements Initializable {
             "P01 - Por definir"
         );
 
-        // 🔒 SOLO NÚMEROS EN TELÉFONO
+        // SOLO NÚMEROS TELÉFONO
         txtTelefono.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {
                 txtTelefono.setText(newVal.replaceAll("[^\\d]", ""));
             }
         });
 
-        // 🔒 SOLO NÚMEROS EN CP
+        // SOLO NÚMEROS CP
         txtCP.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {
                 txtCP.setText(newVal.replaceAll("[^\\d]", ""));
@@ -74,29 +70,25 @@ public class DatosFacturarController implements Initializable {
             cbRegimen.getValue() == null ||
             cbUsoCFDI.getValue() == null) {
 
-            mostrarAlerta("Completa todos los campos obligatorios", Alert.AlertType.WARNING);
+            mostrarAlerta("Completa todos los campos", Alert.AlertType.WARNING);
             return false;
         }
 
-        // RFC
         if (!txtRFC.getText().toUpperCase().matches("[A-ZÑ&]{3,4}[0-9]{6}[A-Z0-9]{3}")) {
             mostrarAlerta("RFC inválido", Alert.AlertType.ERROR);
             return false;
         }
 
-        // Teléfono
         if (!txtTelefono.getText().matches("\\d{10}")) {
             mostrarAlerta("Teléfono inválido (10 dígitos)", Alert.AlertType.ERROR);
             return false;
         }
 
-        // Correo
         if (!validarCorreo(txtCorreo.getText())) {
             mostrarAlerta("Correo inválido", Alert.AlertType.ERROR);
             return false;
         }
 
-        // CP
         if (!txtCP.getText().matches("\\d{5}")) {
             mostrarAlerta("Código Postal inválido (5 dígitos)", Alert.AlertType.ERROR);
             return false;
@@ -161,6 +153,11 @@ public class DatosFacturarController implements Initializable {
 
     private void asociarClienteAVenta(int idCliente) {
 
+        if (idVentaActual == 0) {
+            mostrarAlerta("No hay venta asociada", Alert.AlertType.ERROR);
+            return;
+        }
+
         String sql = "UPDATE venta SET id_cliente = ? WHERE id_venta = ?";
 
         try (Connection con = Conexion.getConnection();
@@ -189,7 +186,7 @@ public class DatosFacturarController implements Initializable {
 
         asociarClienteAVenta(idCliente);
 
-        mostrarAlerta("Cliente guardado correctamente", Alert.AlertType.INFORMATION);
+        mostrarAlerta("Cliente guardado y asociado correctamente", Alert.AlertType.INFORMATION);
 
         cancelar();
     }
