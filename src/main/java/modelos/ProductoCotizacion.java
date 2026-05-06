@@ -5,21 +5,33 @@
 package modelos;
 
 public class ProductoCotizacion {
+
     private String descripcion;
     private int cantidad;
-    private int precio;
-    private int importe;
+    private double precio;
+    private double importe;
 
-    public ProductoCotizacion(String descripcion, int cantidad, int precio) {
+    public ProductoCotizacion(String descripcion, int cantidad, double precio) {
+
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.precio = precio;
         this.importe = cantidad * precio;
     }
 
-    // Getters necesarios para que JavaFX los encuentre
-    public String getDescripcion() { return descripcion; }
-    public int getCantidad() { return cantidad; }
-    public int getPrecio() { return precio; }
-    public int getImporte() { return importe; }
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public double getImporte() {
+        return importe;
+    }
 }

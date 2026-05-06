@@ -4,35 +4,82 @@
  */
 package controladores;
 
+import conexion.Conexion;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.util.List;
 import modelos.Producto;
 
 public class BuscarProductoController {
+
     @FXML private TextField txtFiltro;
-    @FXML private TableView<Producto> tablaBusqueda; // Usa tu clase Producto existente
+    @FXML private TableView<Producto> tablaBusqueda;
     @FXML private TableColumn<Producto, String> colNombre;
     @FXML private TableColumn<Producto, Double> colPrecio;
     @FXML private TableColumn<Producto, Integer> colStock;
+
+    private ObservableList<Producto> listaProductos = FXCollections.observableArrayList();
 
     private Producto seleccionado;
 
     @FXML
     public void initialize() {
-        // Aquí deberías llamar a tu clase de conexión a la DB 
-        // para llenar la tabla inicialmente
+
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
+
+        cargarProductos("");
+
+        txtFiltro.textProperty().addListener((obs, oldValue, newValue) -> {
+            cargarProductos(newValue);
+        });
     }
 
-    @FXML
-    private void filtrarProductos() {
-        // Lógica para buscar en la base de datos mientras escribes
+    private void cargarProductos(String filtro) {
+
+        listaProductos.clear();
+
+        String sql = "SELECT nombre, precio, stock FROM producto WHERE nombre LIKE ?";
+
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + filtro + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Producto p = new Producto();
+
+                p.setNombre(rs.getString("nombre"));
+                p.setPrecio(rs.getInt("precio"));
+                p.setStock(rs.getInt("stock"));
+
+                listaProductos.add(p);
+            }
+
+            tablaBusqueda.setItems(listaProductos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void seleccionar() {
+
         this.seleccionado = tablaBusqueda.getSelectionModel().getSelectedItem();
+
         if (seleccionado != null) {
             cerrar();
         }
@@ -40,6 +87,7 @@ public class BuscarProductoController {
 
     @FXML
     private void cerrar() {
+
         Stage stage = (Stage) txtFiltro.getScene().getWindow();
         stage.close();
     }
