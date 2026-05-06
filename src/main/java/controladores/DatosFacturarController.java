@@ -153,6 +153,11 @@ public class DatosFacturarController implements Initializable {
 
     private void asociarClienteAVenta(int idCliente) {
 
+        if (idVentaActual == 0) {
+            mostrarAlerta("No hay venta asociada", Alert.AlertType.ERROR);
+            return;
+        }
+
         String sql = "UPDATE venta SET id_cliente = ? WHERE id_venta = ?";
 
         try (Connection con = Conexion.getConnection();
@@ -181,7 +186,7 @@ public class DatosFacturarController implements Initializable {
 
         asociarClienteAVenta(idCliente);
 
-        mostrarAlerta("Cliente guardado correctamente", Alert.AlertType.INFORMATION);
+        mostrarAlerta("Cliente guardado y asociado correctamente", Alert.AlertType.INFORMATION);
 
         cancelar();
     }
