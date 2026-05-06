@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,9 +78,12 @@ public class RegistrarVentaController implements Initializable {
     private Button btn_generarNotaRemision;
     @FXML
     private Button btn_solicitarFactura;
-    @FXML private Label lbl_Subtotal;
-    @FXML private Label lbl_Iva;
-    @FXML private Label lbl_Total;
+    @FXML
+    private Label lbl_Subtotal;
+    @FXML
+    private Label lbl_Iva;
+    @FXML
+    private Label lbl_Total;
 
     /**
      * Initializes the controller class.
@@ -136,23 +140,90 @@ public class RegistrarVentaController implements Initializable {
 
     @FXML
     private void btn_finalizarVenta(ActionEvent event) {
+        if (listaCarrito.isEmpty()) {
+            System.out.println("El carrito está vacío");
+            return;
+        }
+
+        String sqlVenta = "INSERT INTO Ventas (id_usuario, fecha, total, subtotal, iva) VALUES (?, ?, ?, ?, ?)";
+        String sqlDetalle = "INSERT INTO Detalle_Venta (id_producto, id_venta, cantidad, precio_unitario) VALUES (?, ?, ?, ?)";
+        String sqlStock = "UPDATE Productos SET stock = stock - ? WHERE id_productos = ?";
+        try (Connection con = new Conexion().getConnection(); 
+                PreparedStatement psVenta = con.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS); 
+                PreparedStatement psDetalle = con.prepareStatement(sqlDetalle) ;
+                PreparedStatement psStock = con.prepareStatement(sqlStock)) {
+
+            // guardar lo de la venta
+            double total = Double.parseDouble(lbl_Total.getText().replace("Total: ", "").trim());
+                double subtotal = Double.parseDouble(lbl_Subtotal.getText().replace("Subtotal: ", "").trim());
+                double iva = Double.parseDouble(lbl_Iva.getText().replace("IVA: ", "").trim());
+
+                psVenta.setInt(1, 1);
+                psVenta.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+                psVenta.setDouble(3, total);
+                psVenta.setDouble(4, subtotal);
+                psVenta.setDouble(5, iva);
+                psVenta.executeUpdate();
+
+                ResultSet rs = psVenta.getGeneratedKeys();
+                int idVentaGenerado = 0;
+                if (rs.next()) {
+                    idVentaGenerado = rs.getInt(1);
+                }
+
+                // guardar los productos del carrito
+                for (DetalleVentaTabla item : listaCarrito) {
+                    psDetalle.setInt(1, item.getId_producto());
+                    psDetalle.setInt(2, idVentaGenerado);
+                    psDetalle.setInt(3, item.getCantidad());
+                    psDetalle.setDouble(4, item.getPrecioXunidad());
+                    psDetalle.executeUpdate();
+
+                    psStock.setInt(1, item.getCantidad()); // Cantidad a restar
+                    psStock.setInt(2, item.getId_producto()); // A qué producto
+                    psStock.executeUpdate();
+                }
+
+                System.out.println("Venta guardada con éxito");
+                limpiarVenta();
+
+            }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        }
+
+        @FXML
+        private void btn_cancelarOp
+        (ActionEvent event
+        
+        
+        ) {
     }
 
     @FXML
-    private void btn_cancelarOp(ActionEvent event) {
+        private void imprimirTicket
+        (ActionEvent event
+        
+        
+        ) {
     }
 
     @FXML
-    private void imprimirTicket(ActionEvent event) {
+        private void generarNota
+        (ActionEvent event
+        
+        
+        ) {
     }
 
     @FXML
-    private void generarNota(ActionEvent event) {
+        private void solicitarFactura
+        (ActionEvent event
+        
+        ) {
     }
 
-    @FXML
-    private void solicitarFactura(ActionEvent event) {
-    }
+    
 
     private void cargarProductos() {
         ObservableList<Producto> list = FXCollections.observableArrayList();
@@ -236,6 +307,14 @@ public class RegistrarVentaController implements Initializable {
         lbl_Subtotal.setText(String.format("Subtotal: %.2f", subtotal));
         lbl_Iva.setText(String.format("IVA: %.2f", iva));
         lbl_Total.setText(String.format("Total: %.2f", total));
+    }
+
+    private void limpiarVenta() {
+        listaCarrito.clear();
+        table_ventaActual.refresh();
+        lbl_Subtotal.setText("0.00");
+        lbl_Iva.setText("0.00");
+        lbl_Total.setText("0.00");
     }
 
 }
