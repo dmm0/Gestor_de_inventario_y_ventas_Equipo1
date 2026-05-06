@@ -19,8 +19,10 @@
             </padding>
 
             <children>
-                <Button text="← Menú" onAction="#regresarMenu"/>
-                <Separator/>
+               <Button text="← Menú"
+                        onAction="#regresarMenu"
+                        style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
+      <Separator/>
                 <Label text="Solicitud de Factura">
                     <font><Font size="18"/></font>
                 </Label>
@@ -88,3 +90,4 @@
 
     </children>
 </VBox>
+
