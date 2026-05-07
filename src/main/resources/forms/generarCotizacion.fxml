@@ -1,120 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="600.0" style="-fx-background-color: B7E1EB;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.GenerarCotizacionController">
-   <children>
-      <HBox prefHeight="36.0" prefWidth="600.0">
-         <children>
-            <Button onAction="#regresarMenu" style="-fx-background-color: #A3E0E6; -fx-cursor: hand;" text="← Menú" />
-            <Separator orientation="VERTICAL">
-               <padding>
-                  <Insets left="5.0" right="5.0" />
-               </padding>
-            </Separator>
-            <Label text="Módulo Cotizaciones">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Region HBox.hgrow="ALWAYS" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </HBox>
-      <ScrollPane prefHeight="392.0" prefWidth="600.0" style="-fx-background-color: transparent;">
-         <content>
-            <VBox spacing="20.0">
-               <children>
-                  <!-- Sección de Datos del Cliente -->
-                  <VBox spacing="10.0">
-                     <children>
-                        <Label style="-fx-font-weight: bold;" text="Datos del Cliente" />
-                        <HBox spacing="15.0">
-                           <children>
-                              <VBox prefWidth="154.0">
-                                 <children>
-                                    <Label text="Nombre:" />
-                                    <TextField fx:id="txtNombre" />
-                                 </children>
-                              </VBox>
-                              <VBox prefWidth="166.0">
-                                 <children>
-                                    <Label text="Teléfono:" />
-                                    <TextField fx:id="txtTelefono" />
-                                 </children>
-                              </VBox>
-                              <VBox prefWidth="167.0">
-                                 <children>
-                                    <Label text="Correo:" />
-                                    <TextField fx:id="txtCorreo" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
+<VBox spacing="10"
+      prefWidth="900"
+      prefHeight="650"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controladores.GenerarCotizacionController"
+      style="-fx-background-color:#F0F8FA;">
 
-                  <!-- Sección de la Tabla de Cotización -->
-                  <VBox spacing="10.0">
-                     <children>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <children>
-                              <Label style="-fx-font-weight: bold;" text="Tabla de Cotización" />
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Button onAction="#buscarProducto" style="-fx-background-color: #A3E0E6; -fx-cursor: hand; -fx-font-weight: bold;" text="+ Añadir Producto" />
-                           </children>
-                        </HBox>
-                        
-                        <TableView fx:id="tablaCotizacion" prefHeight="150.0">
-                           <columns>
-                              <TableColumn fx:id="colDescripcion" prefWidth="240.0" text="Descripción" />
-                              <TableColumn fx:id="colCantidad" prefWidth="80.0" text="Cantidad" />
-                              <TableColumn fx:id="colPrecio" prefWidth="100.0" text="Precio" />
-                              <TableColumn fx:id="colImporte" prefWidth="120.0" text="Importe" />
-                           </columns>
-                        </TableView>
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
 
-                        <HBox alignment="TOP_RIGHT">
-                           <children>
-                              <Label style="-fx-font-weight: bold;" text="TOTAL ESTIMADO:" />
-                              <Label fx:id="lblTotal" text="\$ 00.00">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
+    <!-- HEADER -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
 
-                  <!-- Botones de Acción Final -->
-                  <HBox spacing="15.0">
-                    <children>
-                        <Button onAction="#generarPDF" style="-fx-background-color: #A3E0E6; -fx-cursor: hand;" text="Generar PDF" />
-                        <Button onAction="#enviarCorreo" style="-fx-background-color: #A3E0E6; -fx-cursor: hand;" text="Enviar Correo" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button onAction="#regresarMenu" style="-fx-background-color: #FFB3B3; -fx-cursor: hand;" text="Cancelar" />
-                    </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </VBox>
-         </content>
-      </ScrollPane>
-   </children>
+        <Button text="← Menú"
+                onAction="#regresarMenu"
+                style="-fx-background-color:#A3E0E6;" />
+
+        <Label text="Generar Cotización"
+               style="-fx-font-size:22px;
+                      -fx-font-weight:bold;" />
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <VBox>
+            <Label text="Folio"/>
+            <Label fx:id="lblFolio"
+                   text="COT-0001"
+                   style="-fx-font-weight:bold;"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- CLIENTE -->
+    <GridPane hgap="10" vgap="10">
+
+        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombre"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Teléfono:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtTelefono"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="3"/>
+
+        <Label text="Correo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCorreo"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="1"
+                   GridPane.columnSpan="3"/>
+
+    </GridPane>
+
+    <!-- BOTONES -->
+    <HBox spacing="10">
+
+        <Button text="Agregar Producto"
+                onAction="#buscarProducto"
+                style="-fx-background-color:#A3E0E6;" />
+
+        <Button text="Editar Cantidad"
+                onAction="#editarCantidad"/>
+
+        <Button text="Quitar Producto"
+                onAction="#eliminarProducto"
+                style="-fx-background-color:#FFB3B3;" />
+
+    </HBox>
+
+    <!-- TABLA -->
+    <TableView fx:id="tablaCotizacion" VBox.vgrow="ALWAYS">
+
+        <columns>
+
+            <TableColumn fx:id="colDescripcion"
+                         text="Producto"
+                         prefWidth="320"/>
+
+            <TableColumn fx:id="colCantidad"
+                         text="Cantidad"
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="colPrecio"
+                         text="Precio"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="colImporte"
+                         text="Importe"
+                         prefWidth="120"/>
+
+        </columns>
+
+    </TableView>
+
+    <!-- IVA Y DESCUENTO -->
+    <HBox spacing="30">
+
+        <VBox spacing="5">
+
+            <Label text="IVA (%)"/>
+            <TextField fx:id="txtIVA"
+                       promptText="16"/>
+
+        </VBox>
+
+        <VBox spacing="5">
+
+            <Label text="Descuento (%)"/>
+            <TextField fx:id="txtDescuento"
+                       promptText="0"/>
+
+        </VBox>
+
+        <Button text="Aplicar"
+                onAction="#calcularTotal"
+                style="-fx-background-color:#A3E0E6;" />
+
+    </HBox>
+
+    <!-- TOTALES -->
+    <VBox alignment="CENTER_RIGHT" spacing="5">
+
+        <Label fx:id="lblSubtotal"
+               text="Subtotal: $0.00"/>
+
+        <Label fx:id="lblIVA"
+               text="IVA: $0.00"/>
+
+        <Label fx:id="lblDescuento"
+               text="Descuento: $0.00"/>
+
+        <Label fx:id="lblTotal"
+               text="TOTAL: $0.00"
+               style="-fx-font-size:18px;
+                      -fx-font-weight:bold;" />
+
+    </VBox>
+
+    <!-- BOTONES FINALES -->
+    <HBox spacing="15" alignment="CENTER">
+
+        <Button text="Guardar Cotización"
+                onAction="#guardarCotizacion"
+                style="-fx-background-color:#A3E0E6;" />
+
+        <Button text="Generar PDF"
+                onAction="#generarPDF"
+                style="-fx-background-color:#A3E0E6;" />
+
+        <Button text="Enviar Correo"
+                onAction="#enviarCorreo"
+                style="-fx-background-color:#A3E0E6;" />
+
+        <Button text="Convertir a Venta"
+                onAction="#convertirAVenta"
+                style="-fx-background-color:#C3E6A3;" />
+
+    </HBox>
+
 </VBox>

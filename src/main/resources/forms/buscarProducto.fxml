@@ -8,7 +8,9 @@
         <Label text="Seleccionar Producto" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
         <HBox spacing="10">
             <children>
-                <TextField fx:id="txtFiltro" promptText="Escribe el nombre del producto..." HBox.hgrow="ALWAYS" onKeyReleased="#filtrarProductos" />
+                <TextField fx:id="txtFiltro"
+           promptText="Escribe el nombre del producto..."
+           HBox.hgrow="ALWAYS"/>
             </children>
         </HBox>
         <TableView fx:id="tablaBusqueda" VBox.vgrow="ALWAYS">

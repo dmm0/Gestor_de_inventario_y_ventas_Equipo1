@@ -48,7 +48,7 @@ public class BuscarProductoController {
 
         listaProductos.clear();
 
-        String sql = "SELECT nombre, precio, stock FROM producto WHERE nombre LIKE ?";
+        String sql = "SELECT nombre, precio, stock FROM Productos WHERE nombre Like ?";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
