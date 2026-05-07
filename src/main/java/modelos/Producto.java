@@ -3,20 +3,22 @@ package modelos;
 public class Producto {
     private int id_productos;
     private String nombre;
-    private int stock;
-    private int precio;
+    private double stock; // Cambiado a double para admitir decimales (Mts)
+    private double precio; // Cambiado a double para precios exactos
 
-    public Producto(int id_productos, String nombre, int stock, int precio) {
+    // Constructor completo
+    public Producto(int id_productos, String nombre, double stock, double precio) {
         this.id_productos = id_productos;
         this.nombre = nombre;
         this.stock = stock;
         this.precio = precio;
     }
 
+    // Constructor vacío (limpio)
     public Producto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    // Getters y Setters
     public int getId_productos() {
         return id_productos;
     }
@@ -33,21 +35,19 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public int getStock() {
+    public double getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(double stock) {
         this.stock = stock;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
-    
-    
 }
