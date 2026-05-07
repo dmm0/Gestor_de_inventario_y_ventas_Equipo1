@@ -65,11 +65,23 @@
                <Separator/>
 
                <HBox spacing="10" alignment="CENTER">
-    <Button text="Guardar Egreso" onAction="#guardarEgreso" 
-            style="-fx-background-color: #A3E0E6; -fx-cursor: hand; -fx-font-weight: bold;"/>
-    <Button text="Limpiar" onAction="#limpiarCampos" 
-            style="-fx-background-color: #A3E0E6; -fx-cursor: hand;"/>
-    
+
+    <Button text="Guardar Egreso"
+            onAction="#guardarEgreso"
+            style="-fx-background-color: #8FD694; -fx-cursor: hand; -fx-font-weight: bold;"/>
+
+    <Button text="Modificar"
+            onAction="#modificarEgreso"
+            style="-fx-background-color: #F4D35E; -fx-cursor: hand; -fx-font-weight: bold;"/>
+
+    <Button text="Eliminar"
+            onAction="#eliminarEgreso"
+            style="-fx-background-color: #EE6055; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;"/>
+
+    <Button text="Limpiar"
+            onAction="#limpiarCampos"
+            style="-fx-background-color: #D3D3D3; -fx-cursor: hand;"/>
+
 </HBox>
 
             </VBox>

@@ -102,7 +102,7 @@ public class RegistrarEgresosController implements Initializable {
 
         try (Connection conn = Conexion.getConnection()) {
 
-            String sql = "INSERT INTO egresos (fecha, concepto, monto, referencia, observaciones) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Egresos (fecha, concepto, monto, referencia, observaciones) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, txtFecha.getText());
@@ -143,4 +143,99 @@ public class RegistrarEgresosController implements Initializable {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+    @FXML
+private void modificarEgreso() {
+
+    String concepto = cbConcepto.getEditor().getText().trim();
+
+    if (concepto.isEmpty()) {
+        mostrarAlerta("El concepto es obligatorio");
+        return;
+    }
+
+    if (txtMonto.getText().isEmpty()) {
+        mostrarAlerta("El monto es obligatorio");
+        return;
+    }
+
+    double monto;
+
+    try {
+        monto = Double.parseDouble(txtMonto.getText());
+
+        if (monto <= 0) {
+            mostrarAlerta("El monto debe ser mayor a 0");
+            return;
+        }
+
+    } catch (NumberFormatException e) {
+        mostrarAlerta("Monto inválido");
+        return;
+    }
+
+    String sql = "UPDATE egresos SET monto=?, referencia=?, observaciones=? WHERE concepto=?";
+
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setDouble(1, monto);
+        ps.setString(2, txtReferencia.getText());
+        ps.setString(3, txtObservaciones.getText());
+        ps.setString(4, concepto);
+
+        int filas = ps.executeUpdate();
+
+        if (filas > 0) {
+            mostrarAlerta("Egreso modificado correctamente");
+            limpiarCampos();
+        } else {
+            mostrarAlerta("No existe un egreso con ese concepto");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarAlerta("Error al modificar egreso");
+    }
+}
+
+@FXML
+private void eliminarEgreso() {
+
+    String concepto = cbConcepto.getEditor().getText().trim();
+
+    if (concepto.isEmpty()) {
+        mostrarAlerta("Ingresa el concepto");
+        return;
+    }
+
+    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmacion.setTitle("Confirmar eliminación");
+    confirmacion.setHeaderText(null);
+    confirmacion.setContentText("¿Deseas eliminar este egreso?");
+
+    if (confirmacion.showAndWait().get() != ButtonType.OK) {
+        return;
+    }
+
+    String sql = "DELETE FROM egresos WHERE concepto=?";
+
+    try (Connection conn = Conexion.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, concepto);
+
+        int filas = ps.executeUpdate();
+
+        if (filas > 0) {
+            mostrarAlerta("Egreso eliminado correctamente");
+            limpiarCampos();
+        } else {
+            mostrarAlerta("No existe un egreso con ese concepto");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarAlerta("Error al eliminar egreso");
+    }
+}
 }
