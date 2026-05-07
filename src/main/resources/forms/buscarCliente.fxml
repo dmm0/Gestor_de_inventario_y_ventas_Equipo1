@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10"
+      prefWidth="600"
+      prefHeight="400"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controladores.BuscarClienteController">
+
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <children>
+
+        <Label text="Buscar Cliente"
+               style="-fx-font-size: 18px;
+                      -fx-font-weight: bold;"/>
+
+        <TextField fx:id="txtBuscar"
+                   promptText="Buscar cliente..."/>
+
+        <TableView fx:id="tablaClientes"
+                   VBox.vgrow="ALWAYS">
+
+            <columns>
+
+                <TableColumn fx:id="colId"
+                             text="ID"
+                             prefWidth="60"/>
+
+                <TableColumn fx:id="colNombre"
+                             text="Nombre"
+                             prefWidth="180"/>
+
+                <TableColumn fx:id="colTelefono"
+                             text="Teléfono"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="colCorreo"
+                             text="Correo"
+                             prefWidth="180"/>
+
+            </columns>
+
+        </TableView>
+
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10">
+
+            <children>
+
+                <Button text="Cancelar"
+                        onAction="#cerrar"/>
+
+                <Button text="Seleccionar"
+                        onAction="#seleccionarCliente"/>
+
+            </children>
+
+        </HBox>
+
+    </children>
+
+</VBox>

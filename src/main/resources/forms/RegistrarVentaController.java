@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
-package controladores;
+package forms;
+
 
 import conexion.Conexion;
 import java.net.URL;
@@ -436,8 +433,8 @@ public class RegistrarVentaController implements Initializable {
 
         String sqlVenta =
                 "INSERT INTO Ventas "
-        + "(id_usuario, fecha, total, subtotal, iva, abonado, restante, estado) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                + "(id_usuario, fecha, total, subtotal, iva, abonado, restante, estado_pago) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         String sqlDetalle =
                 "INSERT INTO Detalle_Venta "

@@ -21,47 +21,43 @@ public class ProductoCotizacion {
         this.cantidad = cantidad;
         this.precio = precio;
 
-        calcularImporte();
+        recalcularImporte();
     }
 
-    private void calcularImporte() {
+    private void recalcularImporte() {
 
-        this.importe =
-                this.cantidad * this.precio;
+        this.importe = this.cantidad * this.precio;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
 
-    public void setDescripcion(String descripcion) {
-
-        this.descripcion = descripcion;
-    }
-
     public int getCantidad() {
         return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-
-        this.cantidad = cantidad;
-
-        calcularImporte();
     }
 
     public double getPrecio() {
         return precio;
     }
 
+    public double getImporte() {
+        return importe;
+    }
+
+    // NUEVO
+
+    public void setCantidad(int cantidad) {
+
+        this.cantidad = cantidad;
+
+        recalcularImporte();
+    }
+
     public void setPrecio(double precio) {
 
         this.precio = precio;
 
-        calcularImporte();
-    }
-
-    public double getImporte() {
-        return importe;
+        recalcularImporte();
     }
 }

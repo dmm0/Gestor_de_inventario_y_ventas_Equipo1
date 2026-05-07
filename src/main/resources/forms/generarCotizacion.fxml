@@ -72,6 +72,9 @@
         <Button text="Quitar Producto"
                 onAction="#eliminarProducto"
                 style="-fx-background-color:#FFB3B3;" />
+        
+        <Button text="Seleccionar Cliente
+        onAction="#seleccionarCliente"/>
 
     </HBox>
 

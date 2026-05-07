@@ -14,84 +14,348 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.RegistrarVentaController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="434.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="166.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="226.0" minHeight="0.0" prefHeight="226.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="267.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <VBox prefHeight="200.0" prefWidth="300.0" spacing="10.0">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <children>
-            <TextField fx:id="textField_buscar" alignment="CENTER" promptText="Buscar" />
-            <ScrollPane prefHeight="200.0" prefWidth="200.0">
-               <content>
-                  <TableView fx:id="table_productos" editable="true" prefHeight="170.0" prefWidth="396.0">
+<GridPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="650.0"
+        prefWidth="1100.0"
+        style="-fx-background-color: #F5F7FA;"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="controladores.RegistrarVentaController">
+
+    <columnConstraints>
+        <ColumnConstraints
+                hgrow="SOMETIMES"
+                maxWidth="700.0"
+                minWidth="10.0"
+                prefWidth="700.0" />
+
+        <ColumnConstraints
+                hgrow="SOMETIMES"
+                maxWidth="350.0"
+                minWidth="10.0"
+                prefWidth="300.0" />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints
+                maxHeight="350.0"
+                minHeight="0.0"
+                prefHeight="320.0"
+                vgrow="SOMETIMES" />
+
+        <RowConstraints
+                maxHeight="400.0"
+                minHeight="10.0"
+                prefHeight="330.0"
+                vgrow="SOMETIMES" />
+    </rowConstraints>
+
+    <children>
+
+        <!-- PRODUCTOS -->
+
+        <VBox spacing="15.0"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 15;
+                     -fx-effect: dropshadow(gaussian,
+                     rgba(0,0,0,0.15),10,0,0,3);">
+
+            <padding>
+                <Insets top="15.0"
+                        right="15.0"
+                        bottom="15.0"
+                        left="15.0"/>
+            </padding>
+
+            <children>
+
+                <Label text="Productos"
+                       style="-fx-font-size: 20px;
+                              -fx-font-weight: bold;" />
+
+                <TextField
+                        fx:id="textField_buscar"
+                        promptText="Buscar producto..."
+                        style="-fx-background-radius: 10;
+                               -fx-padding: 8;" />
+
+                <ScrollPane fitToWidth="true"
+                            fitToHeight="true">
+
+                    <content>
+
+                        <TableView fx:id="table_productos"
+                                   prefHeight="250.0"
+                                   prefWidth="650.0"
+                                   style="-fx-background-radius: 10;
+                                          -fx-border-radius: 10;">
+
+                            <columns>
+
+                                <TableColumn
+                                        fx:id="col_id_producto"
+                                        prefWidth="80.0"
+                                        text="ID" />
+
+                                <TableColumn
+                                        fx:id="col_producto"
+                                        prefWidth="220.0"
+                                        text="Producto" />
+
+                                <TableColumn
+                                        fx:id="col_stock"
+                                        prefWidth="100.0"
+                                        text="Stock" />
+
+                                <TableColumn
+                                        fx:id="col_precio"
+                                        prefWidth="120.0"
+                                        text="Precio" />
+
+                                <TableColumn
+                                        fx:id="col_add"
+                                        prefWidth="100.0"
+                                        text="Agregar" />
+
+                            </columns>
+
+                        </TableView>
+
+                    </content>
+
+                </ScrollPane>
+
+            </children>
+
+        </VBox>
+
+        <!-- RESUMEN -->
+
+        <VBox spacing="15.0"
+              GridPane.columnIndex="1"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 15;
+                     -fx-effect: dropshadow(gaussian,
+                     rgba(0,0,0,0.15),10,0,0,3);">
+
+            <padding>
+                <Insets top="15.0"
+                        right="15.0"
+                        bottom="15.0"
+                        left="15.0"/>
+            </padding>
+
+            <children>
+
+                <Label text="Resumen de Venta"
+                       style="-fx-font-size: 20px;
+                              -fx-font-weight: bold;" />
+
+                <Separator />
+
+                <Label fx:id="lbl_Subtotal"
+                       text="Subtotal: 0.00"
+                       style="-fx-font-size: 14px;" />
+
+                <Label fx:id="lbl_Iva"
+                       text="IVA: 0.00"
+                       style="-fx-font-size: 14px;" />
+
+                <Label fx:id="lbl_Total"
+                       text="Total: 0.00"
+                       style="-fx-font-size: 20px;
+                              -fx-font-weight: bold;" />
+
+                <Separator />
+
+                <HBox alignment="CENTER_RIGHT"
+                      spacing="10.0">
+
+                    <children>
+
+                        <Label text="Abonado:"
+                               style="-fx-font-weight: bold;" />
+
+                        <Label fx:id="lbl_Abonado"
+                               text="0.00"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;" />
+
+                    </children>
+
+                </HBox>
+
+                <HBox alignment="CENTER_RIGHT"
+                      spacing="10.0">
+
+                    <children>
+
+                        <Label text="Restante:"
+                               style="-fx-font-weight: bold;" />
+
+                        <Label fx:id="lbl_Restante"
+                               text="0.00"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;" />
+
+                    </children>
+
+                </HBox>
+
+                <HBox alignment="CENTER_RIGHT"
+                      spacing="10.0">
+
+                    <children>
+
+                        <Label text="Estado:"
+                               style="-fx-font-weight: bold;" />
+
+                        <Label fx:id="lbl_Estado"
+                               text="PENDIENTE"
+                               style="-fx-font-size: 14px;
+                                      -fx-font-weight: bold;" />
+
+                    </children>
+
+                </HBox>
+
+                <Separator />
+
+                <Button fx:id="btn_finVenta"
+                        text="Finalizar Venta"
+                        maxWidth="1.7976931348623157E308"
+                        onAction="#btn_finalizarVenta"
+                        style="-fx-background-color: #4CAF50;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 10;" />
+
+                <Button fx:id="btn_cancelarOperacion"
+                        text="Cancelar Operación"
+                        maxWidth="1.7976931348623157E308"
+                        onAction="#btn_cancelarOp"
+                        style="-fx-background-color: #ff4d4d;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 10;" />
+
+                <Button text="Registrar Abono"
+                        maxWidth="1.7976931348623157E308"
+                        onAction="#registrarAbono"
+                        style="-fx-background-color: #A3E0E6;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 10;" />
+
+            </children>
+
+        </VBox>
+
+        <!-- CARRITO -->
+
+        <VBox spacing="15.0"
+              GridPane.columnSpan="2"
+              GridPane.rowIndex="1"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 15;
+                     -fx-effect: dropshadow(gaussian,
+                     rgba(0,0,0,0.15),10,0,0,3);">
+
+            <padding>
+                <Insets top="15.0"
+                        right="15.0"
+                        bottom="15.0"
+                        left="15.0"/>
+            </padding>
+
+            <children>
+
+                <Label text="Productos de la Venta"
+                       style="-fx-font-size: 20px;
+                              -fx-font-weight: bold;" />
+
+                <TableView fx:id="table_ventaActual"
+                           prefHeight="240.0"
+                           prefWidth="1000.0"
+                           style="-fx-background-radius: 10;
+                                  -fx-border-radius: 10;">
+
                     <columns>
-                        <TableColumn fx:id="col_id_producto" prefWidth="75.0" text="Num" />
-                      <TableColumn fx:id="col_producto" prefWidth="75.0" text="Producto" />
-                      <TableColumn fx:id="col_stock" prefWidth="75.0" text="Stock" />
-                        <TableColumn fx:id="col_precio" prefWidth="75.0" text="Precio" />
-                        <TableColumn fx:id="col_add" prefWidth="75.0" text="Accion" />
+
+                        <TableColumn
+                                fx:id="col_codigo"
+                                prefWidth="100.0"
+                                text="Código" />
+
+                        <TableColumn
+                                fx:id="col_descripcion"
+                                prefWidth="350.0"
+                                text="Descripción" />
+
+                        <TableColumn
+                                fx:id="col_cantidad"
+                                prefWidth="100.0"
+                                text="Cantidad" />
+
+                        <TableColumn
+                                fx:id="col_precioUnidad"
+                                prefWidth="150.0"
+                                text="Precio Unidad" />
+
+                        <TableColumn
+                                fx:id="col_importe"
+                                prefWidth="150.0"
+                                text="Importe" />
+
+                        <TableColumn
+                                fx:id="col_accion"
+                                prefWidth="120.0"
+                                text="Acción" />
+
                     </columns>
-                  </TableView>
-               </content>
-            </ScrollPane>
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
-         <children>
-            <Label text="Resumen de la venta:" />
-            <Label fx:id="lbl_Subtotal" text="Subtotal:" />
-            <Label fx:id="lbl_Iva" text="IVA:" />
-            <Label fx:id="lbl_Total" text="Total:" />
-            <Separator prefWidth="200.0" />
-            <Button fx:id="btn_finVenta" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_finalizarVenta" text="Finalizar Venta" />
-            <Button fx:id="btn_cancelarOperacion" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btn_cancelarOp" text="Cancelar operación" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <children>
-            <TableView fx:id="table_ventaActual" prefHeight="200.0" prefWidth="200.0">
-              <columns>
-                <TableColumn fx:id="col_codigo" prefWidth="75.0" text="Código" />
-                <TableColumn fx:id="col_descripcion" prefWidth="75.0" text="Descripción" />
-                  <TableColumn fx:id="col_cantidad" prefWidth="75.0" text="Cant." />
-                  <TableColumn fx:id="col_precioUnidad" prefWidth="75.0" text="Precio/unidad" />
-                  <TableColumn fx:id="col_importe" prefWidth="75.0" text="Importe" />
-                  <TableColumn fx:id="col_accion" prefWidth="75.0" text="Acción" />
-              </columns>
-            </TableView>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <children>
-                  <Button fx:id="btn_imprimirTicket" mnemonicParsing="false" onAction="#imprimirTicket" text="Imprimir ticket">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="btn_generarNotaRemision" mnemonicParsing="false" onAction="#generarNota" text="Generar Nota Remisión" />
-                  <Button fx:id="btn_solicitarFactura" mnemonicParsing="false" onAction="#solicitarFactura" text="Solicitar factura" />
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
-   </children>
+
+                </TableView>
+
+                <HBox spacing="15.0"
+                      alignment="CENTER_LEFT">
+
+                    <children>
+
+                        <Button fx:id="btn_imprimirTicket"
+                                text="Imprimir Ticket"
+                                onAction="#imprimirTicket"
+                                style="-fx-background-color: #2196F3;
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 10;" />
+
+                        <Button fx:id="btn_generarNotaRemision"
+                                text="Generar Nota Remisión"
+                                onAction="#generarNota"
+                                style="-fx-background-color: #9C27B0;
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 10;" />
+
+                        <Button fx:id="btn_solicitarFactura"
+                                text="Solicitar Factura"
+                                onAction="#solicitarFactura"
+                                style="-fx-background-color: #FF9800;
+                                       -fx-text-fill: white;
+                                       -fx-font-weight: bold;
+                                       -fx-background-radius: 10;" />
+
+                    </children>
+
+                </HBox>
+
+            </children>
+
+        </VBox>
+
+    </children>
+
 </GridPane>

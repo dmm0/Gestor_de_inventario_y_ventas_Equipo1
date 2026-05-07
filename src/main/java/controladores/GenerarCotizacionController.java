@@ -42,6 +42,8 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
+import java.sql.Statement;
+import modelos.Cliente;
 
 public class GenerarCotizacionController implements Initializable {
 
@@ -72,7 +74,7 @@ public class GenerarCotizacionController implements Initializable {
     private double ivaTotal = 0;
     private double descuentoTotal = 0;
     private double total = 0;
-
+    private int idClienteActual;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -306,84 +308,101 @@ public class GenerarCotizacionController implements Initializable {
         );
     }
 
-    @FXML
     private void guardarCotizacion() {
 
-        try (Connection con =
-                     Conexion.getConnection()) {
+    try (Connection con =
+                 Conexion.getConnection()) {
 
-            String sql =
-                    "INSERT INTO cotizacion "
-                    + "(folio,cliente,telefono,"
-                    + "correo,subtotal,iva,"
-                    + "descuento,total) "
-                    + "VALUES(?,?,?,?,?,?,?,?)";
+        String sqlCotizacion =
+                "INSERT INTO cotizacion "
+                + "(folio,id_cliente,"
+                + "subtotal,iva,descuento,"
+                + "total,estado) "
+                + "VALUES(?,?,?,?,?,?,?)";
 
-            PreparedStatement ps =
-                    con.prepareStatement(sql);
-
-            ps.setString(1, lblFolio.getText());
-            ps.setString(2, txtNombre.getText());
-            ps.setString(3, txtTelefono.getText());
-            ps.setString(4, txtCorreo.getText());
-
-            ps.setDouble(5, subtotal);
-            ps.setDouble(6, ivaTotal);
-            ps.setDouble(7, descuentoTotal);
-            ps.setDouble(8, total);
-
-            ps.executeUpdate();
-
-            for (ProductoCotizacion p : listaProductos) {
-
-                String detalle =
-                        "INSERT INTO detalle_cotizacion "
-                        + "(folio,producto,cantidad,"
-                        + "precio,importe)"
-                        + " VALUES(?,?,?,?,?)";
-
-                PreparedStatement psDetalle =
-                        con.prepareStatement(detalle);
-
-                psDetalle.setString(
-                        1,
-                        lblFolio.getText()
+        PreparedStatement ps =
+                con.prepareStatement(
+                        sqlCotizacion,
+                        Statement.RETURN_GENERATED_KEYS
                 );
 
-                psDetalle.setString(
-                        2,
-                        p.getDescripcion()
-                );
+        ps.setString(1, lblFolio.getText());
 
-                psDetalle.setInt(
-                        3,
-                        p.getCantidad()
-                );
+        ps.setInt(2, idClienteActual);
 
-                psDetalle.setDouble(
-                        4,
-                        p.getPrecio()
-                );
+        ps.setDouble(3, subtotal);
 
-                psDetalle.setDouble(
-                        5,
-                        p.getImporte()
-                );
+        ps.setDouble(4, ivaTotal);
 
-                psDetalle.executeUpdate();
-            }
+        ps.setDouble(5, descuentoTotal);
 
-            mostrarAlerta(
-                    "Éxito",
-                    "Cotización guardada",
-                    Alert.AlertType.INFORMATION
+        ps.setDouble(6, total);
+
+        ps.setString(7, "PENDIENTE");
+
+        ps.executeUpdate();
+
+        ResultSet rs =
+                ps.getGeneratedKeys();
+
+        int idCotizacion = 0;
+
+        if (rs.next()) {
+
+            idCotizacion = rs.getInt(1);
+        }
+
+        // DETALLES
+
+        String sqlDetalle =
+                "INSERT INTO detalle_cotizacion "
+                + "(id_cotizacion,"
+                + "producto,cantidad,"
+                + "precio,importe)"
+                + " VALUES(?,?,?,?,?)";
+
+        PreparedStatement psDetalle =
+                con.prepareStatement(sqlDetalle);
+
+        for (ProductoCotizacion p :
+                listaProductos) {
+
+            psDetalle.setInt(1, idCotizacion);
+
+            psDetalle.setString(
+                    2,
+                    p.getDescripcion()
             );
 
-        } catch (Exception e) {
+            psDetalle.setInt(
+                    3,
+                    p.getCantidad()
+            );
 
-            e.printStackTrace();
+            psDetalle.setDouble(
+                    4,
+                    p.getPrecio()
+            );
+
+            psDetalle.setDouble(
+                    5,
+                    p.getImporte()
+            );
+
+            psDetalle.executeUpdate();
         }
+
+        mostrarAlerta(
+                "Éxito",
+                "Cotización guardada",
+                Alert.AlertType.INFORMATION
+        );
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
     }
+}
 
  @FXML
 private void generarPDF() {
@@ -786,4 +805,53 @@ private PdfPCell crearCeldaDerecha(String texto) {
             e.printStackTrace();
         }
     }
+    @FXML
+private void seleccionarCliente() {
+
+    try {
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/forms/buscarCliente.fxml"
+                        )
+                );
+
+        Parent root = loader.load();
+
+        BuscarClienteController controller =
+                loader.getController();
+
+        Stage stage = new Stage();
+
+        stage.setScene(new Scene(root));
+
+        stage.showAndWait();
+
+        Cliente cliente =
+                controller.getClienteSeleccionado();
+
+        if (cliente != null) {
+
+            idClienteActual =
+                    cliente.getId_cliente();
+
+            txtNombre.setText(
+                    cliente.getNombre()
+            );
+
+            txtTelefono.setText(
+                    cliente.getTelefono()
+            );
+
+            txtCorreo.setText(
+                    cliente.getCorreo()
+            );
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
 }
