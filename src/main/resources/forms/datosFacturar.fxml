@@ -79,9 +79,24 @@
                     </VBox>
 
                     <HBox spacing="10">
-                        <Button text="Guardar" onAction="#guardarDatos"/>
-                        <Button text="Limpiar" onAction="#cancelar"/>
-                    </HBox>
+
+    <Button text="Guardar"
+            onAction="#guardarDatos"
+            style="-fx-background-color: #8FD694; -fx-cursor: hand;"/>
+
+    <Button text="Modificar"
+            onAction="#modificarCliente"
+            style="-fx-background-color: #F4D35E; -fx-cursor: hand;"/>
+
+    <Button text="Eliminar"
+            onAction="#eliminarCliente"
+            style="-fx-background-color: #EE6055; -fx-text-fill: white; -fx-cursor: hand;"/>
+
+    <Button text="Limpiar"
+            onAction="#cancelar"
+            style="-fx-background-color: #D3D3D3; -fx-cursor: hand;"/>
+
+</HBox>
 
                 </VBox>
             </content>

@@ -214,4 +214,83 @@ public class DatosFacturarController implements Initializable {
         a.setContentText(msg);
         a.showAndWait();
     }
+    @FXML
+private void modificarCliente() {
+
+    if (!validarCampos()) return;
+
+    String sql = "UPDATE cliente SET nombre=?, telefono=?, correo=?, direccion=?, regimen_fiscal=?, cp=?, uso_cfdi=? WHERE rfc=?";
+
+    try (Connection con = Conexion.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, txtNombre.getText());
+        ps.setString(2, txtTelefono.getText());
+        ps.setString(3, txtCorreo.getText());
+        ps.setString(4, txtDireccion.getText());
+        ps.setString(5, cbRegimen.getValue());
+        ps.setString(6, txtCP.getText());
+        ps.setString(7, cbUsoCFDI.getValue());
+        ps.setString(8, txtRFC.getText());
+
+        int filas = ps.executeUpdate();
+
+        if (filas > 0) {
+            mostrarAlerta("Cliente modificado correctamente", Alert.AlertType.INFORMATION);
+            cancelar();
+        } else {
+            mostrarAlerta("No existe un cliente con ese RFC", Alert.AlertType.ERROR);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarAlerta("Error al modificar cliente", Alert.AlertType.ERROR);
+    }
+}
+
+@FXML
+private void eliminarCliente() {
+
+    if (txtRFC.getText().isEmpty()) {
+        mostrarAlerta("Ingresa el RFC del cliente", Alert.AlertType.WARNING);
+        return;
+    }
+
+    Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmacion.setTitle("Confirmar eliminación");
+    confirmacion.setHeaderText(null);
+    confirmacion.setContentText("¿Deseas eliminar este cliente?");
+
+    if (confirmacion.showAndWait().get() != ButtonType.OK) {
+        return;
+    }
+
+    String sql = "DELETE FROM cliente WHERE rfc = ?";
+
+    try (Connection con = Conexion.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, txtRFC.getText());
+
+        int filas = ps.executeUpdate();
+
+        if (filas > 0) {
+            mostrarAlerta("Cliente eliminado correctamente", Alert.AlertType.INFORMATION);
+            cancelar();
+        } else {
+            mostrarAlerta("No existe un cliente con ese RFC", Alert.AlertType.ERROR);
+        }
+
+    } catch (SQLIntegrityConstraintViolationException e) {
+
+        mostrarAlerta(
+            "No se puede eliminar porque el cliente está asociado a ventas",
+            Alert.AlertType.ERROR
+        );
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarAlerta("Error al eliminar cliente", Alert.AlertType.ERROR);
+    }
+}
 }
