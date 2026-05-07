@@ -5,41 +5,65 @@
 package controladores;
 
 import conexion.Conexion;
-import java.net.URL;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.stage.Stage;
+
 import modelos.Producto;
 
 public class BuscarProductoController {
 
-    @FXML private TextField txtFiltro;
-    @FXML private TableView<Producto> tablaBusqueda;
-    @FXML private TableColumn<Producto, String> colNombre;
-    @FXML private TableColumn<Producto, Double> colPrecio;
-    @FXML private TableColumn<Producto, Integer> colStock;
+    @FXML
+    private TextField txtFiltro;
 
-    private ObservableList<Producto> listaProductos = FXCollections.observableArrayList();
+    @FXML
+    private TableView<Producto> tablaBusqueda;
+
+    @FXML
+    private TableColumn<Producto, String> colNombre;
+
+    @FXML
+    private TableColumn<Producto, Double> colPrecio;
+
+    @FXML
+    private TableColumn<Producto, Double> colStock;
+
+    private ObservableList<Producto> listaProductos =
+            FXCollections.observableArrayList();
 
     private Producto seleccionado;
 
     @FXML
     public void initialize() {
 
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
-        colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        colNombre.setCellValueFactory(
+                new PropertyValueFactory<>("nombre"));
+
+        colPrecio.setCellValueFactory(
+                new PropertyValueFactory<>("precio"));
+
+        colStock.setCellValueFactory(
+                new PropertyValueFactory<>("stock"));
 
         cargarProductos("");
 
-        txtFiltro.textProperty().addListener((obs, oldValue, newValue) -> {
+        txtFiltro.textProperty().addListener(
+                (obs, oldValue, newValue) -> {
+
             cargarProductos(newValue);
         });
     }
@@ -48,29 +72,50 @@ public class BuscarProductoController {
 
         listaProductos.clear();
 
-        String sql = "SELECT nombre, precio, stock FROM Productos WHERE nombre Like ?";
+        String sql =
+                "SELECT id_productos,"
+                + "nombre,precio,stock "
+                + "FROM Productos "
+                + "WHERE nombre LIKE ?";
 
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con =
+                     Conexion.getConnection();
 
-            ps.setString(1, "%" + filtro + "%");
+             PreparedStatement ps =
+                     con.prepareStatement(sql)) {
 
-            ResultSet rs = ps.executeQuery();
+            ps.setString(
+                    1,
+                    "%" + filtro + "%");
+
+            ResultSet rs =
+                    ps.executeQuery();
 
             while (rs.next()) {
 
-                Producto p = new Producto();
+                Producto p =
+                        new Producto();
 
-                p.setNombre(rs.getString("nombre"));
-                p.setPrecio(rs.getInt("precio"));
-                p.setStock(rs.getInt("stock"));
+                p.setId_productos(
+                        rs.getInt("id_productos"));
+
+                p.setNombre(
+                        rs.getString("nombre"));
+
+                p.setPrecio(
+                        rs.getDouble("precio"));
+
+                p.setStock(
+                        rs.getDouble("stock"));
 
                 listaProductos.add(p);
             }
 
-            tablaBusqueda.setItems(listaProductos);
+            tablaBusqueda.setItems(
+                    listaProductos);
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
@@ -78,9 +123,13 @@ public class BuscarProductoController {
     @FXML
     private void seleccionar() {
 
-        this.seleccionado = tablaBusqueda.getSelectionModel().getSelectedItem();
+        seleccionado =
+                tablaBusqueda
+                        .getSelectionModel()
+                        .getSelectedItem();
 
         if (seleccionado != null) {
+
             cerrar();
         }
     }
@@ -88,11 +137,16 @@ public class BuscarProductoController {
     @FXML
     private void cerrar() {
 
-        Stage stage = (Stage) txtFiltro.getScene().getWindow();
+        Stage stage =
+                (Stage) txtFiltro
+                        .getScene()
+                        .getWindow();
+
         stage.close();
     }
 
     public Producto getSeleccionado() {
+
         return seleccionado;
     }
 }

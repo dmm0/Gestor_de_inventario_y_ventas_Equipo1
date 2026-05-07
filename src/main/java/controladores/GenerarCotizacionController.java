@@ -13,6 +13,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -20,101 +21,233 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import modelos.Cliente;
 import modelos.Producto;
 import modelos.ProductoCotizacion;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.Image;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPTable;
+
 import com.itextpdf.text.pdf.PdfPCell;
-import java.sql.Statement;
-import modelos.Cliente;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
-public class GenerarCotizacionController implements Initializable {
+public class GenerarCotizacionController
+        implements Initializable {
 
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtTelefono;
-    @FXML private TextField txtCorreo;
+    @FXML
+    private TextField txtNombre;
 
-    @FXML private TextField txtIVA;
-    @FXML private TextField txtDescuento;
+    @FXML
+    private TextField txtTelefono;
 
-    @FXML private Label lblSubtotal;
-    @FXML private Label lblIVA;
-    @FXML private Label lblDescuento;
-    @FXML private Label lblTotal;
-    @FXML private Label lblFolio;
+    @FXML
+    private TextField txtCorreo;
 
-    @FXML private TableView<ProductoCotizacion> tablaCotizacion;
+    @FXML
+    private TextField txtIVA;
 
-    @FXML private TableColumn<ProductoCotizacion, String> colDescripcion;
-    @FXML private TableColumn<ProductoCotizacion, Integer> colCantidad;
-    @FXML private TableColumn<ProductoCotizacion, Double> colPrecio;
-    @FXML private TableColumn<ProductoCotizacion, Double> colImporte;
+    @FXML
+    private TextField txtDescuento;
 
-    private ObservableList<ProductoCotizacion> listaProductos =
+    @FXML
+    private Label lblSubtotal;
+
+    @FXML
+    private Label lblIVA;
+
+    @FXML
+    private Label lblDescuento;
+
+    @FXML
+    private Label lblTotal;
+
+    @FXML
+    private Label lblFolio;
+
+    @FXML
+    private TableView<ProductoCotizacion> tablaCotizacion;
+
+    @FXML
+    private TableColumn<ProductoCotizacion, String> colDescripcion;
+
+    @FXML
+    private TableColumn<ProductoCotizacion, Integer> colCantidad;
+
+    @FXML
+    private TableColumn<ProductoCotizacion, Double> colPrecio;
+
+    @FXML
+    private TableColumn<ProductoCotizacion, Double> colImporte;
+
+    private ObservableList<ProductoCotizacion>
+            listaProductos =
             FXCollections.observableArrayList();
 
     private double subtotal = 0;
     private double ivaTotal = 0;
     private double descuentoTotal = 0;
     private double total = 0;
-    private int idClienteActual;
+
+    private int idClienteActual = 0;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(
+            URL url,
+            ResourceBundle rb
+    ) {
 
         colDescripcion.setCellValueFactory(
-                new PropertyValueFactory<>("descripcion"));
+                new PropertyValueFactory<>(
+                        "descripcion"
+                )
+        );
 
         colCantidad.setCellValueFactory(
-                new PropertyValueFactory<>("cantidad"));
+                new PropertyValueFactory<>(
+                        "cantidad"
+                )
+        );
 
         colPrecio.setCellValueFactory(
-                new PropertyValueFactory<>("precio"));
+                new PropertyValueFactory<>(
+                        "precio"
+                )
+        );
 
         colImporte.setCellValueFactory(
-                new PropertyValueFactory<>("importe"));
+                new PropertyValueFactory<>(
+                        "importe"
+                )
+        );
 
-        tablaCotizacion.setItems(listaProductos);
+        tablaCotizacion.setItems(
+                listaProductos
+        );
 
         generarFolio();
+
+        txtIVA.setText("16");
+
+        txtDescuento.setText("0");
     }
 
     private void generarFolio() {
 
-        try (Connection con = Conexion.getConnection()) {
+        try (
+                Connection con =
+                        Conexion.getConnection()
+        ) {
 
-            String sql = "SELECT COUNT(*) FROM cotizacion";
+            String sql =
+                    "SELECT COUNT(*) "
+                    + "FROM cotizacion";
 
-            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps =
+                    con.prepareStatement(sql);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs =
+                    ps.executeQuery();
 
             if (rs.next()) {
 
-                int numero = rs.getInt(1) + 1;
+                int numero =
+                        rs.getInt(1) + 1;
 
                 lblFolio.setText(
-                        String.format("COT-%04d", numero)
+                        String.format(
+                                "COT-%04d",
+                                numero
+                        )
                 );
             }
 
         } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void seleccionarCliente() {
+
+        try {
+
+            FXMLLoader loader =
+                    new FXMLLoader(
+                            getClass()
+                                    .getResource(
+                                            "/forms/buscarCliente.fxml"
+                                    )
+                    );
+
+            Parent root =
+                    loader.load();
+
+            BuscarClienteController controller =
+                    loader.getController();
+
+            Stage stage =
+                    new Stage();
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
+
+            stage.showAndWait();
+
+            Cliente cliente =
+                    controller
+                            .getClienteSeleccionado();
+
+            if (cliente != null) {
+
+                idClienteActual =
+                        cliente.getId_cliente();
+
+                txtNombre.setText(
+                        cliente.getNombre()
+                );
+
+                txtTelefono.setText(
+                        cliente.getTelefono()
+                );
+
+                txtCorreo.setText(
+                        cliente.getCorreo()
+                );
+            }
+
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
@@ -126,25 +259,33 @@ public class GenerarCotizacionController implements Initializable {
 
             FXMLLoader loader =
                     new FXMLLoader(
-                            getClass().getResource(
-                                    "/forms/buscarProducto.fxml"
-                            )
+                            getClass()
+                                    .getResource(
+                                            "/forms/buscarProducto.fxml"
+                                    )
                     );
 
-            Parent root = loader.load();
+            Parent root =
+                    loader.load();
 
             BuscarProductoController buscador =
                     loader.getController();
 
-            Stage stage = new Stage();
+            Stage stage =
+                    new Stage();
 
-            stage.setScene(new Scene(root));
+            stage.setScene(
+                    new Scene(root)
+            );
 
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(
+                    Modality.APPLICATION_MODAL
+            );
 
             stage.showAndWait();
 
-            Producto elegido = buscador.getSeleccionado();
+            Producto elegido =
+                    buscador.getSeleccionado();
 
             if (elegido != null) {
 
@@ -157,7 +298,9 @@ public class GenerarCotizacionController implements Initializable {
         }
     }
 
-    private void pedirCantidad(Producto elegido) {
+    private void pedirCantidad(
+            Producto elegido
+    ) {
 
         TextInputDialog dialog =
                 new TextInputDialog("1");
@@ -168,12 +311,15 @@ public class GenerarCotizacionController implements Initializable {
                 elegido.getNombre()
         );
 
-        dialog.showAndWait().ifPresent(cantidad -> {
+        dialog.showAndWait().ifPresent(
+                cantidad -> {
 
             try {
 
                 int cant =
-                        Integer.parseInt(cantidad);
+                        Integer.parseInt(
+                                cantidad
+                        );
 
                 listaProductos.add(
                         new ProductoCotizacion(
@@ -200,7 +346,8 @@ public class GenerarCotizacionController implements Initializable {
     private void editarCantidad() {
 
         ProductoCotizacion seleccionado =
-                tablaCotizacion.getSelectionModel()
+                tablaCotizacion
+                        .getSelectionModel()
                         .getSelectedItem();
 
         if (seleccionado == null) {
@@ -221,16 +368,23 @@ public class GenerarCotizacionController implements Initializable {
                         )
                 );
 
-        dialog.setTitle("Editar Cantidad");
+        dialog.setTitle(
+                "Editar Cantidad"
+        );
 
-        dialog.showAndWait().ifPresent(valor -> {
+        dialog.showAndWait().ifPresent(
+                valor -> {
 
             try {
 
                 int nueva =
-                        Integer.parseInt(valor);
+                        Integer.parseInt(
+                                valor
+                        );
 
-                seleccionado.setCantidad(nueva);
+                seleccionado.setCantidad(
+                        nueva
+                );
 
                 tablaCotizacion.refresh();
 
@@ -251,12 +405,15 @@ public class GenerarCotizacionController implements Initializable {
     private void eliminarProducto() {
 
         ProductoCotizacion seleccionado =
-                tablaCotizacion.getSelectionModel()
+                tablaCotizacion
+                        .getSelectionModel()
                         .getSelectedItem();
 
         if (seleccionado != null) {
 
-            listaProductos.remove(seleccionado);
+            listaProductos.remove(
+                    seleccionado
+            );
 
             calcularTotal();
         }
@@ -267,20 +424,26 @@ public class GenerarCotizacionController implements Initializable {
 
         subtotal = 0;
 
-        for (ProductoCotizacion p : listaProductos) {
+        for (ProductoCotizacion p :
+                listaProductos) {
 
-            subtotal += p.getImporte();
+            subtotal +=
+                    p.getImporte();
         }
 
         double iva =
                 txtIVA.getText().isEmpty()
-                        ? 0
-                        : Double.parseDouble(txtIVA.getText());
+                ? 0
+                : Double.parseDouble(
+                        txtIVA.getText()
+                );
 
         double descuento =
                 txtDescuento.getText().isEmpty()
-                        ? 0
-                        : Double.parseDouble(txtDescuento.getText());
+                ? 0
+                : Double.parseDouble(
+                        txtDescuento.getText()
+                );
 
         ivaTotal =
                 subtotal * (iva / 100);
@@ -289,464 +452,637 @@ public class GenerarCotizacionController implements Initializable {
                 subtotal * (descuento / 100);
 
         total =
-                subtotal + ivaTotal - descuentoTotal;
+                subtotal
+                + ivaTotal
+                - descuentoTotal;
 
         lblSubtotal.setText(
-                "Subtotal: $" + subtotal
+                String.format(
+                        "Subtotal: $%.2f",
+                        subtotal
+                )
         );
 
         lblIVA.setText(
-                "IVA: $" + ivaTotal
+                String.format(
+                        "IVA: $%.2f",
+                        ivaTotal
+                )
         );
 
         lblDescuento.setText(
-                "Descuento: $" + descuentoTotal
+                String.format(
+                        "Descuento: $%.2f",
+                        descuentoTotal
+                )
         );
 
         lblTotal.setText(
-                "TOTAL: $" + total
+                String.format(
+                        "TOTAL: $%.2f",
+                        total
+                )
         );
     }
 
+    @FXML
     private void guardarCotizacion() {
 
-    try (Connection con =
-                 Conexion.getConnection()) {
+        if (listaProductos.isEmpty()) {
 
-        String sqlCotizacion =
-                "INSERT INTO cotizacion "
-                + "(folio,id_cliente,"
-                + "subtotal,iva,descuento,"
-                + "total,estado) "
-                + "VALUES(?,?,?,?,?,?,?)";
+            mostrarAlerta(
+                    "Vacío",
+                    "Agregue productos",
+                    Alert.AlertType.WARNING
+            );
 
-        PreparedStatement ps =
-                con.prepareStatement(
-                        sqlCotizacion,
-                        Statement.RETURN_GENERATED_KEYS
-                );
-
-        ps.setString(1, lblFolio.getText());
-
-        ps.setInt(2, idClienteActual);
-
-        ps.setDouble(3, subtotal);
-
-        ps.setDouble(4, ivaTotal);
-
-        ps.setDouble(5, descuentoTotal);
-
-        ps.setDouble(6, total);
-
-        ps.setString(7, "PENDIENTE");
-
-        ps.executeUpdate();
-
-        ResultSet rs =
-                ps.getGeneratedKeys();
-
-        int idCotizacion = 0;
-
-        if (rs.next()) {
-
-            idCotizacion = rs.getInt(1);
+            return;
         }
 
-        // DETALLES
+        if (idClienteActual == 0) {
 
-        String sqlDetalle =
-                "INSERT INTO detalle_cotizacion "
-                + "(id_cotizacion,"
-                + "producto,cantidad,"
-                + "precio,importe)"
-                + " VALUES(?,?,?,?,?)";
+            mostrarAlerta(
+                    "Cliente",
+                    "Seleccione un cliente",
+                    Alert.AlertType.WARNING
+            );
 
-        PreparedStatement psDetalle =
-                con.prepareStatement(sqlDetalle);
+            return;
+        }
 
-        for (ProductoCotizacion p :
-                listaProductos) {
+        try (
+                Connection con =
+                        Conexion.getConnection()
+        ) {
 
-            psDetalle.setInt(1, idCotizacion);
+            String sqlCotizacion =
+                    "INSERT INTO cotizacion "
+                    + "("
+                    + "folio,"
+                    + "id_cliente,"
+                    + "subtotal,"
+                    + "iva,"
+                    + "descuento,"
+                    + "total,"
+                    + "estado"
+                    + ") "
+                    + "VALUES(?,?,?,?,?,?,?)";
 
-            psDetalle.setString(
+            PreparedStatement ps =
+                    con.prepareStatement(
+                            sqlCotizacion,
+                            Statement.RETURN_GENERATED_KEYS
+                    );
+
+            ps.setString(
+                    1,
+                    lblFolio.getText()
+            );
+
+            ps.setInt(
                     2,
-                    p.getDescripcion()
+                    idClienteActual
             );
 
-            psDetalle.setInt(
+            ps.setDouble(
                     3,
-                    p.getCantidad()
+                    subtotal
             );
 
-            psDetalle.setDouble(
+            ps.setDouble(
                     4,
-                    p.getPrecio()
+                    ivaTotal
             );
 
-            psDetalle.setDouble(
+            ps.setDouble(
                     5,
-                    p.getImporte()
+                    descuentoTotal
             );
 
-            psDetalle.executeUpdate();
+            ps.setDouble(
+                    6,
+                    total
+            );
+
+            ps.setString(
+                    7,
+                    "PENDIENTE"
+            );
+
+            ps.executeUpdate();
+
+            ResultSet rs =
+                    ps.getGeneratedKeys();
+
+            int idCotizacion = 0;
+
+            if (rs.next()) {
+
+                idCotizacion =
+                        rs.getInt(1);
+            }
+
+            String sqlDetalle =
+                    "INSERT INTO detalle_cotizacion "
+                    + "("
+                    + "id_cotizacion,"
+                    + "producto,"
+                    + "cantidad,"
+                    + "precio,"
+                    + "importe"
+                    + ") "
+                    + "VALUES(?,?,?,?,?)";
+
+            PreparedStatement psDetalle =
+                    con.prepareStatement(
+                            sqlDetalle
+                    );
+
+            for (ProductoCotizacion p :
+                    listaProductos) {
+
+                psDetalle.setInt(
+                        1,
+                        idCotizacion
+                );
+
+                psDetalle.setString(
+                        2,
+                        p.getDescripcion()
+                );
+
+                psDetalle.setInt(
+                        3,
+                        p.getCantidad()
+                );
+
+                psDetalle.setDouble(
+                        4,
+                        p.getPrecio()
+                );
+
+                psDetalle.setDouble(
+                        5,
+                        p.getImporte()
+                );
+
+                psDetalle.executeUpdate();
+            }
+
+            mostrarAlerta(
+                    "Éxito",
+                    "Cotización guardada",
+                    Alert.AlertType.INFORMATION
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
-
-        mostrarAlerta(
-                "Éxito",
-                "Cotización guardada",
-                Alert.AlertType.INFORMATION
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
     }
-}
 
- @FXML
-private void generarPDF() {
+    @FXML
+    private void generarPDF() {
 
-    try {
+        try {
 
-        String nombreArchivo =
-                lblFolio.getText() + ".pdf";
+            String nombreArchivo =
+                    lblFolio.getText()
+                    + ".pdf";
 
-        Document documento =
-                new Document(PageSize.LETTER, 40, 40, 40, 40);
+            Document documento =
+                    new Document(
+                            PageSize.LETTER,
+                            40,
+                            40,
+                            40,
+                            40
+                    );
 
-        PdfWriter.getInstance(
-                documento,
-                new FileOutputStream(nombreArchivo)
-        );
+            PdfWriter.getInstance(
+                    documento,
+                    new FileOutputStream(
+                            nombreArchivo
+                    )
+            );
 
-        documento.open();
+            documento.open();
 
-        // ===== FUENTES =====
+            Font tituloFont =
+                    FontFactory.getFont(
+                            FontFactory.HELVETICA_BOLD,
+                            18
+                    );
 
-        Font tituloFont =
-                FontFactory.getFont(
-                        FontFactory.HELVETICA_BOLD,
-                        18
-                );
+            Font normalFont =
+                    FontFactory.getFont(
+                            FontFactory.HELVETICA,
+                            11
+                    );
 
-        Font normalFont =
-                FontFactory.getFont(
-                        FontFactory.HELVETICA,
-                        11
-                );
+            Font boldFont =
+                    FontFactory.getFont(
+                            FontFactory.HELVETICA_BOLD,
+                            11
+                    );
 
-        Font boldFont =
-                FontFactory.getFont(
-                        FontFactory.HELVETICA_BOLD,
-                        11
-                );
+            PdfPTable encabezado =
+                    new PdfPTable(2);
 
-        // ===== ENCABEZADO =====
+            encabezado.setWidthPercentage(
+                    100
+            );
 
-        PdfPTable encabezado =
-                new PdfPTable(2);
+            encabezado.setWidths(
+                    new float[]{2, 4}
+            );
 
-        encabezado.setWidthPercentage(100);
+            Image logo =
+                    Image.getInstance(
+                            getClass()
+                                    .getResource(
+                                            "/forms/logo.jpg"
+                                    )
+                    );
 
-        encabezado.setWidths(new float[]{2, 4});
+            logo.scaleToFit(
+                    150,
+                    100
+            );
 
-        // LOGO
+            PdfPCell celdaLogo =
+                    new PdfPCell(logo);
 
-        Image logo =
-                Image.getInstance(
-                        getClass()
-                                .getResource("/forms/logo.jpg")
-                );
+            celdaLogo.setBorder(0);
 
-        logo.scaleToFit(150, 100);
+            encabezado.addCell(
+                    celdaLogo
+            );
 
-        PdfPCell celdaLogo =
-                new PdfPCell(logo);
+            PdfPCell datosEmpresa =
+                    new PdfPCell();
 
-        celdaLogo.setBorder(0);
+            datosEmpresa.setBorder(0);
 
-        encabezado.addCell(celdaLogo);
+            datosEmpresa.addElement(
+                    new Paragraph(
+                            "TRIATES PAPELERÍA",
+                            tituloFont
+                    )
+            );
 
-        // DATOS EMPRESA
+            datosEmpresa.addElement(
+                    new Paragraph(
+                            "Rosal #176 Col. Valle de las Flores",
+                            normalFont
+                    )
+            );
 
-        PdfPCell datosEmpresa =
-                new PdfPCell();
+            datosEmpresa.addElement(
+                    new Paragraph(
+                            "Tel: 844 493 61 84",
+                            normalFont
+                    )
+            );
 
-        datosEmpresa.setBorder(0);
+            datosEmpresa.addElement(
+                    new Paragraph(
+                            "Saltillo, Coahuila",
+                            normalFont
+                    )
+            );
 
-        datosEmpresa.addElement(
-                new Paragraph(
-                        "TRIATES PAPELERÍA",
-                        tituloFont
-                )
-        );
+            encabezado.addCell(
+                    datosEmpresa
+            );
 
-        datosEmpresa.addElement(
-                new Paragraph(
-                        "Rosal #176 Col. Valle de las Flores",
-                        normalFont
-                )
-        );
+            documento.add(
+                    encabezado
+            );
 
-        datosEmpresa.addElement(
-                new Paragraph(
-                        "Tel: 844 493 61 84",
-                        normalFont
-                )
-        );
+            documento.add(
+                    new Paragraph(" ")
+            );
 
-        datosEmpresa.addElement(
-                new Paragraph(
-                        "Saltillo, Coahuila",
-                        normalFont
-                )
-        );
+            Paragraph titulo =
+                    new Paragraph(
+                            "COTIZACIÓN",
+                            tituloFont
+                    );
 
-        encabezado.addCell(datosEmpresa);
+            titulo.setAlignment(
+                    Element.ALIGN_CENTER
+            );
 
-        documento.add(encabezado);
+            documento.add(
+                    titulo
+            );
 
-        documento.add(new Paragraph(" "));
+            documento.add(
+                    new Paragraph(" ")
+            );
 
-        // ===== TITULO =====
+            PdfPTable datos =
+                    new PdfPTable(2);
 
-        Paragraph titulo =
-                new Paragraph(
-                        "COTIZACIÓN",
-                        tituloFont
-                );
+            datos.setWidthPercentage(
+                    100
+            );
 
-        titulo.setAlignment(Element.ALIGN_CENTER);
+            datos.setWidths(
+                    new float[]{1, 2}
+            );
 
-        documento.add(titulo);
+            datos.addCell(
+                    crearCeldaTitulo("Folio")
+            );
 
-        documento.add(new Paragraph(" "));
+            datos.addCell(
+                    crearCelda(
+                            lblFolio.getText()
+                    )
+            );
 
-        // ===== DATOS CLIENTE =====
+            datos.addCell(
+                    crearCeldaTitulo("Cliente")
+            );
 
-        PdfPTable datos =
-                new PdfPTable(2);
+            datos.addCell(
+                    crearCelda(
+                            txtNombre.getText()
+                    )
+            );
 
-        datos.setWidthPercentage(100);
+            datos.addCell(
+                    crearCeldaTitulo("Teléfono")
+            );
 
-        datos.setWidths(new float[]{1, 2});
+            datos.addCell(
+                    crearCelda(
+                            txtTelefono.getText()
+                    )
+            );
 
-        datos.addCell(crearCeldaTitulo("Folio"));
-        datos.addCell(crearCelda(lblFolio.getText()));
+            datos.addCell(
+                    crearCeldaTitulo("Correo")
+            );
 
-        datos.addCell(crearCeldaTitulo("Cliente"));
-        datos.addCell(crearCelda(txtNombre.getText()));
+            datos.addCell(
+                    crearCelda(
+                            txtCorreo.getText()
+                    )
+            );
 
-        datos.addCell(crearCeldaTitulo("Teléfono"));
-        datos.addCell(crearCelda(txtTelefono.getText()));
+            documento.add(datos);
 
-        datos.addCell(crearCeldaTitulo("Correo"));
-        datos.addCell(crearCelda(txtCorreo.getText()));
+            documento.add(
+                    new Paragraph(" ")
+            );
 
-        documento.add(datos);
+            PdfPTable tabla =
+                    new PdfPTable(4);
 
-        documento.add(new Paragraph(" "));
+            tabla.setWidthPercentage(
+                    100
+            );
 
-        // ===== TABLA PRODUCTOS =====
+            tabla.setWidths(
+                    new float[]{1,4,2,2}
+            );
 
-        PdfPTable tabla =
-                new PdfPTable(4);
-
-        tabla.setWidthPercentage(100);
-
-        tabla.setWidths(
-                new float[]{1, 4, 2, 2}
-        );
-
-        String[] encabezados = {
+            String[] encabezados = {
                 "CANTIDAD",
                 "DESCRIPCIÓN",
                 "PRECIO",
                 "IMPORTE"
-        };
+            };
 
-        for (String texto : encabezados) {
+            for (String texto :
+                    encabezados) {
 
-            PdfPCell celda =
-                    new PdfPCell(
-                            new Phrase(texto, boldFont)
-                    );
+                PdfPCell celda =
+                        new PdfPCell(
+                                new Phrase(
+                                        texto,
+                                        boldFont
+                                )
+                        );
 
-            celda.setBackgroundColor(
-                    new BaseColor(163,224,230)
+                celda.setBackgroundColor(
+                        new BaseColor(
+                                163,
+                                224,
+                                230
+                        )
+                );
+
+                celda.setHorizontalAlignment(
+                        Element.ALIGN_CENTER
+                );
+
+                celda.setPadding(8);
+
+                tabla.addCell(celda);
+            }
+
+            for (ProductoCotizacion p :
+                    listaProductos) {
+
+                tabla.addCell(
+                        crearCeldaCentro(
+                                String.valueOf(
+                                        p.getCantidad()
+                                )
+                        )
+                );
+
+                tabla.addCell(
+                        crearCelda(
+                                p.getDescripcion()
+                        )
+                );
+
+                tabla.addCell(
+                        crearCeldaDerecha(
+                                "$" + p.getPrecio()
+                        )
+                );
+
+                tabla.addCell(
+                        crearCeldaDerecha(
+                                "$" + p.getImporte()
+                        )
+                );
+            }
+
+            documento.add(tabla);
+
+            documento.add(
+                    new Paragraph(" ")
             );
 
-            celda.setHorizontalAlignment(
+            PdfPTable totales =
+                    new PdfPTable(2);
+
+            totales.setWidthPercentage(
+                    40
+            );
+
+            totales.setHorizontalAlignment(
+                    Element.ALIGN_RIGHT
+            );
+
+            totales.addCell(
+                    crearCeldaTitulo(
+                            "Subtotal"
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaDerecha(
+                            "$" + subtotal
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaTitulo(
+                            "IVA"
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaDerecha(
+                            "$" + ivaTotal
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaTitulo(
+                            "Descuento"
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaDerecha(
+                            "$" + descuentoTotal
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaTitulo(
+                            "TOTAL"
+                    )
+            );
+
+            totales.addCell(
+                    crearCeldaDerecha(
+                            "$" + total
+                    )
+            );
+
+            documento.add(
+                    totales
+            );
+
+            documento.add(
+                    new Paragraph(" ")
+            );
+
+            Paragraph mensaje =
+                    new Paragraph(
+                            "Gracias por su preferencia.",
+                            normalFont
+                    );
+
+            mensaje.setAlignment(
                     Element.ALIGN_CENTER
             );
 
-            celda.setPadding(8);
+            documento.add(
+                    mensaje
+            );
 
-            tabla.addCell(celda);
+            documento.close();
+
+            Desktop.getDesktop().open(
+                    new File(nombreArchivo)
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
+    }
 
-        // PRODUCTOS
+    private PdfPCell crearCelda(
+            String texto
+    ) {
 
-        for (ProductoCotizacion p : listaProductos) {
-
-            tabla.addCell(
-                    crearCeldaCentro(
-                            String.valueOf(
-                                    p.getCantidad()
-                            )
-                    )
-            );
-
-            tabla.addCell(
-                    crearCelda(
-                            p.getDescripcion()
-                    )
-            );
-
-            tabla.addCell(
-                    crearCeldaDerecha(
-                            "$" + p.getPrecio()
-                    )
-            );
-
-            tabla.addCell(
-                    crearCeldaDerecha(
-                            "$" + p.getImporte()
-                    )
-            );
-        }
-
-        documento.add(tabla);
-
-        documento.add(new Paragraph(" "));
-
-        // ===== TOTALES =====
-
-        PdfPTable totales =
-                new PdfPTable(2);
-
-        totales.setWidthPercentage(40);
-
-        totales.setHorizontalAlignment(
-                Element.ALIGN_RIGHT
-        );
-
-        totales.addCell(
-                crearCeldaTitulo("Subtotal")
-        );
-
-        totales.addCell(
-                crearCeldaDerecha("$" + subtotal)
-        );
-
-        totales.addCell(
-                crearCeldaTitulo("IVA")
-        );
-
-        totales.addCell(
-                crearCeldaDerecha("$" + ivaTotal)
-        );
-
-        totales.addCell(
-                crearCeldaTitulo("Descuento")
-        );
-
-        totales.addCell(
-                crearCeldaDerecha("$" + descuentoTotal)
-        );
-
-        totales.addCell(
-                crearCeldaTitulo("TOTAL")
-        );
-
-        totales.addCell(
-                crearCeldaDerecha("$" + total)
-        );
-
-        documento.add(totales);
-
-        documento.add(new Paragraph(" "));
-
-        // ===== MENSAJE =====
-
-        Paragraph mensaje =
-                new Paragraph(
-                        "Gracias por su preferencia.",
-                        normalFont
+        PdfPCell celda =
+                new PdfPCell(
+                        new Phrase(texto)
                 );
 
-        mensaje.setAlignment(
+        celda.setPadding(5);
+
+        return celda;
+    }
+
+    private PdfPCell crearCeldaTitulo(
+            String texto
+    ) {
+
+        PdfPCell celda =
+                new PdfPCell(
+                        new Phrase(
+                                texto,
+                                FontFactory.getFont(
+                                        FontFactory.HELVETICA_BOLD
+                                )
+                        )
+                );
+
+        celda.setBackgroundColor(
+                new BaseColor(
+                        230,
+                        230,
+                        230
+                )
+        );
+
+        celda.setPadding(5);
+
+        return celda;
+    }
+
+    private PdfPCell crearCeldaCentro(
+            String texto
+    ) {
+
+        PdfPCell celda =
+                crearCelda(texto);
+
+        celda.setHorizontalAlignment(
                 Element.ALIGN_CENTER
         );
 
-        documento.add(mensaje);
+        return celda;
+    }
 
-        documento.close();
+    private PdfPCell crearCeldaDerecha(
+            String texto
+    ) {
 
-        Desktop.getDesktop().open(
-                new File(nombreArchivo)
+        PdfPCell celda =
+                crearCelda(texto);
+
+        celda.setHorizontalAlignment(
+                Element.ALIGN_RIGHT
         );
 
-    } catch (Exception e) {
-
-        e.printStackTrace();
+        return celda;
     }
-}
-private PdfPCell crearCelda(String texto) {
 
-    PdfPCell celda =
-            new PdfPCell(new Phrase(texto));
-
-    celda.setPadding(5);
-
-    return celda;
-}
-
-private PdfPCell crearCeldaTitulo(String texto) {
-
-    PdfPCell celda =
-            new PdfPCell(
-                    new Phrase(
-                            texto,
-                            FontFactory.getFont(
-                                    FontFactory.HELVETICA_BOLD
-                            )
-                    )
-            );
-
-    celda.setBackgroundColor(
-            new BaseColor(230,230,230)
-    );
-
-    celda.setPadding(5);
-
-    return celda;
-}
-
-private PdfPCell crearCeldaCentro(String texto) {
-
-    PdfPCell celda =
-            crearCelda(texto);
-
-    celda.setHorizontalAlignment(
-            Element.ALIGN_CENTER
-    );
-
-    return celda;
-}
-
-private PdfPCell crearCeldaDerecha(String texto) {
-
-    PdfPCell celda =
-            crearCelda(texto);
-
-    celda.setHorizontalAlignment(
-            Element.ALIGN_RIGHT
-    );
-
-    return celda;
-}
     @FXML
     private void enviarCorreo() {
 
@@ -755,7 +1091,7 @@ private PdfPCell crearCeldaDerecha(String texto) {
             Desktop.getDesktop().browse(
                     new URI(
                             "mailto:"
-                                    + txtCorreo.getText()
+                            + txtCorreo.getText()
                     )
             );
 
@@ -768,11 +1104,32 @@ private PdfPCell crearCeldaDerecha(String texto) {
     @FXML
     private void convertirAVenta() {
 
-        mostrarAlerta(
-                "Convertido",
-                "La cotización ahora puede generar una venta/remisión.",
-                Alert.AlertType.INFORMATION
+        Alert alert =
+                new Alert(
+                        Alert.AlertType.CONFIRMATION
+                );
+
+        alert.setTitle(
+                "Convertir"
         );
+
+        alert.setHeaderText(null);
+
+        alert.setContentText(
+                "¿Convertir cotización a venta?"
+        );
+
+        if (
+                alert.showAndWait().get()
+                == ButtonType.OK
+        ) {
+
+            mostrarAlerta(
+                    "Éxito",
+                    "Cotización convertida",
+                    Alert.AlertType.INFORMATION
+            );
+        }
     }
 
     private void mostrarAlerta(
@@ -788,7 +1145,9 @@ private PdfPCell crearCeldaDerecha(String texto) {
 
         alert.setHeaderText(null);
 
-        alert.setContentText(mensaje);
+        alert.setContentText(
+                mensaje
+        );
 
         alert.showAndWait();
     }
@@ -798,60 +1157,13 @@ private PdfPCell crearCeldaDerecha(String texto) {
 
         try {
 
-            App.setRoot("menu_principal");
+            App.setRoot(
+                    "menu_principal"
+            );
 
         } catch (Exception e) {
 
             e.printStackTrace();
         }
     }
-    @FXML
-private void seleccionarCliente() {
-
-    try {
-
-        FXMLLoader loader =
-                new FXMLLoader(
-                        getClass().getResource(
-                                "/forms/buscarCliente.fxml"
-                        )
-                );
-
-        Parent root = loader.load();
-
-        BuscarClienteController controller =
-                loader.getController();
-
-        Stage stage = new Stage();
-
-        stage.setScene(new Scene(root));
-
-        stage.showAndWait();
-
-        Cliente cliente =
-                controller.getClienteSeleccionado();
-
-        if (cliente != null) {
-
-            idClienteActual =
-                    cliente.getId_cliente();
-
-            txtNombre.setText(
-                    cliente.getNombre()
-            );
-
-            txtTelefono.setText(
-                    cliente.getTelefono()
-            );
-
-            txtCorreo.setText(
-                    cliente.getCorreo()
-            );
-        }
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-    }
-}
 }

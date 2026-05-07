@@ -1,36 +1,45 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controladores;
 
 import conexion.Conexion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.stage.Stage;
 
 import modelos.Cliente;
 
 public class BuscarClienteController {
 
-    @FXML private TextField txtBuscar;
+    @FXML
+    private TextField txtBuscar;
 
-    @FXML private TableView<Cliente> tablaClientes;
+    @FXML
+    private TableView<Cliente> tablaClientes;
 
-    @FXML private TableColumn<Cliente,Integer> colId;
+    @FXML
+    private TableColumn<Cliente,Integer> colId;
 
-    @FXML private TableColumn<Cliente,String> colNombre;
+    @FXML
+    private TableColumn<Cliente,String> colNombre;
 
-    @FXML private TableColumn<Cliente,String> colTelefono;
+    @FXML
+    private TableColumn<Cliente,String> colTelefono;
 
-    @FXML private TableColumn<Cliente,String> colCorreo;
+    @FXML
+    private TableColumn<Cliente,String> colCorreo;
 
     private ObservableList<Cliente> lista =
             FXCollections.observableArrayList();
@@ -69,22 +78,23 @@ public class BuscarClienteController {
                 "SELECT * FROM cliente "
                 + "WHERE nombre LIKE ?";
 
-        try (
-                Connection con =
-                        Conexion.getConnection();
+        try (Connection con =
+                     Conexion.getConnection();
 
-                PreparedStatement ps =
-                        con.prepareStatement(sql)
-        ) {
+             PreparedStatement ps =
+                     con.prepareStatement(sql)) {
 
-            ps.setString(1, "%" + filtro + "%");
+            ps.setString(
+                    1,
+                    "%" + filtro + "%");
 
             ResultSet rs =
                     ps.executeQuery();
 
             while (rs.next()) {
 
-                Cliente c = new Cliente();
+                Cliente c =
+                        new Cliente();
 
                 c.setId_cliente(
                         rs.getInt("id_cliente"));

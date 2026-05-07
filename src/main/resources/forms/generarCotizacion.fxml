@@ -13,11 +13,16 @@
       style="-fx-background-color:#F0F8FA;">
 
     <padding>
-        <Insets top="15" right="15" bottom="15" left="15"/>
+        <Insets top="15"
+                right="15"
+                bottom="15"
+                left="15"/>
     </padding>
 
     <!-- HEADER -->
-    <HBox spacing="20" alignment="CENTER_LEFT">
+
+    <HBox spacing="20"
+           alignment="CENTER_LEFT">
 
         <Button text="← Menú"
                 onAction="#regresarMenu"
@@ -30,28 +35,42 @@
         <Region HBox.hgrow="ALWAYS"/>
 
         <VBox>
+
             <Label text="Folio"/>
+
             <Label fx:id="lblFolio"
                    text="COT-0001"
                    style="-fx-font-weight:bold;"/>
+
         </VBox>
 
     </HBox>
 
     <!-- CLIENTE -->
-    <GridPane hgap="10" vgap="10">
 
-        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <GridPane hgap="10"
+              vgap="10">
+
+        <Label text="Nombre:"
+               GridPane.rowIndex="0"
+               GridPane.columnIndex="0"/>
+
         <TextField fx:id="txtNombre"
                    GridPane.rowIndex="0"
                    GridPane.columnIndex="1"/>
 
-        <Label text="Teléfono:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <Label text="Teléfono:"
+               GridPane.rowIndex="0"
+               GridPane.columnIndex="2"/>
+
         <TextField fx:id="txtTelefono"
                    GridPane.rowIndex="0"
                    GridPane.columnIndex="3"/>
 
-        <Label text="Correo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label text="Correo:"
+               GridPane.rowIndex="1"
+               GridPane.columnIndex="0"/>
+
         <TextField fx:id="txtCorreo"
                    GridPane.rowIndex="1"
                    GridPane.columnIndex="1"
@@ -60,6 +79,7 @@
     </GridPane>
 
     <!-- BOTONES -->
+
     <HBox spacing="10">
 
         <Button text="Agregar Producto"
@@ -72,14 +92,17 @@
         <Button text="Quitar Producto"
                 onAction="#eliminarProducto"
                 style="-fx-background-color:#FFB3B3;" />
-        
-        <Button text="Seleccionar Cliente
-        onAction="#seleccionarCliente"/>
+
+        <Button text="Seleccionar Cliente"
+                onAction="#seleccionarCliente"
+                style="-fx-background-color:#A3E0E6;" />
 
     </HBox>
 
     <!-- TABLA -->
-    <TableView fx:id="tablaCotizacion" VBox.vgrow="ALWAYS">
+
+    <TableView fx:id="tablaCotizacion"
+               VBox.vgrow="ALWAYS">
 
         <columns>
 
@@ -104,11 +127,13 @@
     </TableView>
 
     <!-- IVA Y DESCUENTO -->
+
     <HBox spacing="30">
 
         <VBox spacing="5">
 
             <Label text="IVA (%)"/>
+
             <TextField fx:id="txtIVA"
                        promptText="16"/>
 
@@ -117,6 +142,7 @@
         <VBox spacing="5">
 
             <Label text="Descuento (%)"/>
+
             <TextField fx:id="txtDescuento"
                        promptText="0"/>
 
@@ -129,7 +155,9 @@
     </HBox>
 
     <!-- TOTALES -->
-    <VBox alignment="CENTER_RIGHT" spacing="5">
+
+    <VBox alignment="CENTER_RIGHT"
+          spacing="5">
 
         <Label fx:id="lblSubtotal"
                text="Subtotal: $0.00"/>
@@ -148,7 +176,9 @@
     </VBox>
 
     <!-- BOTONES FINALES -->
-    <HBox spacing="15" alignment="CENTER">
+
+    <HBox spacing="15"
+          alignment="CENTER">
 
         <Button text="Guardar Cotización"
                 onAction="#guardarCotizacion"
