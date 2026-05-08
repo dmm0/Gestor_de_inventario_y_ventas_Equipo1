@@ -9,105 +9,94 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import modelos.DetalleVentaTabla;
 
 public class GenerarNotaRemisionController implements Initializable {
 
-    @FXML private Label lblFolio;
-    @FXML private Label lblFecha;
-    @FXML private Label lblCliente;
-    @FXML private Label lblSubtotal;
-    @FXML private Label lblTotal;
-    @FXML private VBox contenedorProductos;
+    @FXML
+    private Label lblFolio;
+    @FXML
+    private Label lblFecha;
+    @FXML
+    private Label lblCliente;
+    @FXML
+    private Label lblSubtotal;
+    @FXML
+    private Label lblTotal;
+    @FXML
+    private VBox contenedorProductos;
 
-    private int idVenta;
+    private int idVentaRecibido;
+    private double totalRecibido; // Variable global del controlador
+
+    @FXML
+    private TableView<DetalleVentaTabla> table_carrito;
+    @FXML
+    private TableColumn<DetalleVentaTabla, Integer> col_cantidad;
+    @FXML
+    private TableColumn<DetalleVentaTabla, String> col_descripcion;
+    @FXML
+    private TableColumn<DetalleVentaTabla, Double> col_precioUnit;
+    @FXML
+    private TableColumn<DetalleVentaTabla, Double> col_importe;
+
+    private ObservableList<DetalleVentaTabla> listaCarrito = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
+        col_cantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        col_descripcion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        col_precioUnit.setCellValueFactory(new PropertyValueFactory<>("precioXunidad"));
+        col_importe.setCellValueFactory(new PropertyValueFactory<>("importe"));
+
     }
 
-    public void cargarVenta(int idVenta) {
-        if (idVenta <= 0) return;
-        this.idVenta = idVenta;
+    public void setVentaData(int idVenta, String fecha, double total, ObservableList<DetalleVentaTabla> carrito) {
+        this.idVentaRecibido = idVenta;
+        this.totalRecibido = total;
+        lblFolio.setText(String.valueOf(idVenta));
+        lblFecha.setText(fecha);
+        lblTotal.setText(String.format("%.2f", total));
 
-        try (Connection conn = Conexion.getConnection()) {
-            // 1. Cargar encabezado
-            String sqlVenta = "SELECT v.ID_VENTA, v.FECHA, c.NOMBRE " +
-                              "FROM VENTA v " +
-                              "LEFT JOIN CLIENTE c ON v.ID_CLIENTE = c.ID_CLIENTE " +
-                              "WHERE v.ID_VENTA = ?";
-
-            try (PreparedStatement psVenta = conn.prepareStatement(sqlVenta)) {
-                psVenta.setInt(1, idVenta);
-                ResultSet rsVenta = psVenta.executeQuery();
-                if (rsVenta.next()) {
-                    lblFolio.setText(String.valueOf(rsVenta.getInt("ID_VENTA")));
-                    lblFecha.setText(rsVenta.getString("FECHA"));
-                    lblCliente.setText(rsVenta.getString("NOMBRE") != null ? rsVenta.getString("NOMBRE") : "Público en general");
-                }
-            }
-
-            // 2. Cargar productos
-            String sqlDetalle = "SELECT d.CANTIDAD, p.NOMBRE, d.PRECIO_UNITARIO, (d.CANTIDAD * d.PRECIO_UNITARIO) AS IMPORTE " +
-                                "FROM DETALLE_VENTA d JOIN PRODUCTO p ON d.ID_PRODUCTO = p.ID_PRODUCTO " +
-                                "WHERE d.ID_VENTA = ?";
-
-            contenedorProductos.getChildren().clear();
-            double subtotal = 0;
-
-            try (PreparedStatement psDetalle = conn.prepareStatement(sqlDetalle)) {
-                psDetalle.setInt(1, idVenta);
-                ResultSet rs = psDetalle.executeQuery();
-
-                while (rs.next()) {
-                    double importe = rs.getDouble("IMPORTE");
-                    subtotal += importe;
-
-                    // Crear fila alineada
-                    HBox fila = new HBox(5);
-                    
-                    Label c1 = new Label(String.valueOf(rs.getInt("CANTIDAD")));
-                    c1.setPrefWidth(60);
-                    
-                    Label c2 = new Label(rs.getString("NOMBRE"));
-                    c2.setPrefWidth(240);
-                    
-                    Label c3 = new Label(String.format("$ %.2f", rs.getDouble("PRECIO_UNITARIO")));
-                    c3.setPrefWidth(110);
-                    
-                    Label c4 = new Label(String.format("$ %.2f", importe));
-                    c4.setPrefWidth(110);
-
-                    fila.getChildren().addAll(c1, c2, c3, c4);
-                    contenedorProductos.getChildren().add(fila);
-                }
-            }
-
-            lblSubtotal.setText(String.format("$ %.2f", subtotal));
-            lblTotal.setText(String.format("$ %.2f", subtotal));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error al conectar con la base de datos", Alert.AlertType.ERROR);
-        }
+        this.listaCarrito.setAll(carrito);
+        table_carrito.setItems(listaCarrito);
     }
 
     @FXML
     private void generarNota() {
-        if (idVenta > 0) {
-            mostrarAlerta("Nota de remisión #" + idVenta + " generada con éxito.", Alert.AlertType.INFORMATION);
+        String sql = "INSERT INTO Remisiones (id_venta, fecha, total) VALUES (?, ?, ?)";
+
+        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idVentaRecibido);
+            ps.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+            ps.setDouble(3, totalRecibido);
+
+            ps.executeUpdate();
+            System.out.println("Nota de Remisión guardada con éxito.");
+
+            // Aquí podrías cerrar la ventana o mandar a imprimir
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-   @FXML
-        private void regresarMenu() throws IOException {
-        App.setRoot("registrarVenta");}
+    @FXML
+    private void regresarMenu() throws IOException {
+        App.setRoot("registrarVenta");
+    }
 
     private void mostrarAlerta(String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);

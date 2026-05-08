@@ -5,11 +5,13 @@
 package controladores;
 
 import conexion.Conexion;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +20,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -27,6 +32,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import modelos.DetalleVentaTabla;
@@ -100,14 +106,13 @@ public class RegistrarVentaController implements Initializable {
     @FXML
     private javafx.scene.control.Label lbl_Total;
 
-    private ObservableList<DetalleVentaTabla> listaCarrito =
-            FXCollections.observableArrayList();
+    private ObservableList<DetalleVentaTabla> listaCarrito
+            = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         // BUSCADOR
-
         textField_buscar.textProperty().addListener((obs, oldValue, newValue) -> {
 
             buscarProductos(newValue);
@@ -115,7 +120,6 @@ public class RegistrarVentaController implements Initializable {
         });
 
         // TABLA PRODUCTOS
-
         col_id_producto.setCellValueFactory(
                 new PropertyValueFactory<>("id_productos"));
 
@@ -129,7 +133,6 @@ public class RegistrarVentaController implements Initializable {
                 new PropertyValueFactory<>("precio"));
 
         // TABLA CARRITO
-
         col_codigo.setCellValueFactory(
                 new PropertyValueFactory<>("id_producto"));
 
@@ -148,10 +151,8 @@ public class RegistrarVentaController implements Initializable {
         cargarProductos();
 
         // BOTÓN +
-
-        Callback<TableColumn<Producto, Void>,
-                TableCell<Producto, Void>> cellFactory =
-                new Callback<>() {
+        Callback<TableColumn<Producto, Void>, TableCell<Producto, Void>> cellFactory
+                = new Callback<>() {
 
             @Override
             public TableCell<Producto, Void> call(
@@ -159,15 +160,15 @@ public class RegistrarVentaController implements Initializable {
 
                 return new TableCell<>() {
 
-                    private final Button btn =
-                            new Button("+");
+                    private final Button btn
+                            = new Button("+");
 
                     {
 
                         btn.setOnAction((ActionEvent event) -> {
 
-                            Producto producto =
-                                    getTableView()
+                            Producto producto
+                                    = getTableView()
                                             .getItems()
                                             .get(getIndex());
 
@@ -201,17 +202,15 @@ public class RegistrarVentaController implements Initializable {
 
     private void cargarProductos() {
 
-        ObservableList<Producto> list =
-                FXCollections.observableArrayList();
+        ObservableList<Producto> list
+                = FXCollections.observableArrayList();
 
-        String sql =
-                "SELECT id_productos, nombre, stock, precio "
+        String sql
+                = "SELECT id_productos, nombre, stock, precio "
                 + "FROM Productos";
 
-        try (Connection con = Conexion.getConnection();
-                PreparedStatement ps =
-                con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps
+                = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
 
@@ -235,17 +234,16 @@ public class RegistrarVentaController implements Initializable {
 
     private void buscarProductos(String texto) {
 
-        ObservableList<Producto> list =
-                FXCollections.observableArrayList();
+        ObservableList<Producto> list
+                = FXCollections.observableArrayList();
 
-        String sql =
-                "SELECT id_productos, nombre, stock, precio "
+        String sql
+                = "SELECT id_productos, nombre, stock, precio "
                 + "FROM Productos "
                 + "WHERE nombre LIKE ?";
 
-        try (Connection con = Conexion.getConnection();
-                PreparedStatement ps =
-                con.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps
+                = con.prepareStatement(sql)) {
 
             ps.setString(1, "%" + texto + "%");
 
@@ -278,8 +276,8 @@ public class RegistrarVentaController implements Initializable {
             if (item.getId_producto()
                     == p.getId_productos()) {
 
-                int nuevaCant =
-                        item.getCantidad() + 1;
+                int nuevaCant
+                        = item.getCantidad() + 1;
 
                 item.setCantidad(nuevaCant);
 
@@ -298,8 +296,8 @@ public class RegistrarVentaController implements Initializable {
 
         if (!existe) {
 
-            DetalleVentaTabla nuevoDetalle =
-                    new DetalleVentaTabla(
+            DetalleVentaTabla nuevoDetalle
+                    = new DetalleVentaTabla(
                             p.getId_productos(),
                             p.getNombre(),
                             1,
@@ -343,9 +341,141 @@ public class RegistrarVentaController implements Initializable {
     }
 
     @FXML
-    private void btn_finalizarVenta(ActionEvent event) {
+    private void btn_finalizarVenta(ActionEvent event) throws IOException {
 
-        System.out.println("Venta finalizada");
+        if (listaCarrito.isEmpty()) {
+
+            System.out.println("El carrito está vacío");
+
+            return;
+        }
+
+        String sqlVenta
+                = "INSERT INTO Ventas "
+                + "(id_usuario, fecha, total, subtotal, iva) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        String sqlDetalle
+                = "INSERT INTO Detalle_Venta "
+                + "(id_producto, id_venta, cantidad, precio_unitario) "
+                + "VALUES (?, ?, ?, ?)";
+
+        String sqlStock
+                = "UPDATE Productos "
+                + "SET stock = stock - ? "
+                + "WHERE id_productos = ?";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement psVenta
+                = con.prepareStatement(
+                        sqlVenta,
+                        Statement.RETURN_GENERATED_KEYS); PreparedStatement psDetalle
+                = con.prepareStatement(sqlDetalle); PreparedStatement psStock
+                = con.prepareStatement(sqlStock)) {
+
+            double total
+                    = Double.parseDouble(
+                            lbl_Total.getText()
+                                    .replace("Total: ", "")
+                                    .trim());
+
+            double subtotal
+                    = Double.parseDouble(
+                            lbl_Subtotal.getText()
+                                    .replace("Subtotal: ", "")
+                                    .trim());
+
+            double iva
+                    = Double.parseDouble(
+                            lbl_Iva.getText()
+                                    .replace("IVA: ", "")
+                                    .trim());
+
+            psVenta.setInt(1, 1);
+
+            psVenta.setDate(
+                    2,
+                    new java.sql.Date(
+                            System.currentTimeMillis()));
+
+            psVenta.setDouble(3, total);
+
+            psVenta.setDouble(4, subtotal);
+
+            psVenta.setDouble(5, iva);
+
+            psVenta.executeUpdate();
+
+            ResultSet rs
+                    = psVenta.getGeneratedKeys();
+
+            int idVentaGenerado = 0;
+
+            if (rs.next()) {
+
+                idVentaGenerado = rs.getInt(1);
+            }
+
+            for (DetalleVentaTabla item : listaCarrito) {
+
+                psDetalle.setInt(
+                        1,
+                        item.getId_producto());
+
+                psDetalle.setInt(
+                        2,
+                        idVentaGenerado);
+
+                psDetalle.setInt(
+                        3,
+                        item.getCantidad());
+
+                psDetalle.setDouble(
+                        4,
+                        item.getPrecioXunidad());
+
+                psDetalle.executeUpdate();
+
+                // DESCONTAR STOCK
+                psStock.setInt(
+                        1,
+                        item.getCantidad());
+
+                psStock.setInt(
+                        2,
+                        item.getId_producto());
+
+                psStock.executeUpdate();
+            }
+
+            System.out.println(
+                    "Venta guardada con éxito");
+
+            URL url = getClass().getResource("/forms/generarNotaRemision.fxml");
+            if (url == null) {
+                System.out.println("¡ERROR: No encontré el archivo FXML!");
+            } else {
+                System.out.println("Archivo encontrado en: " + url.getPath());
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/generarNotaRemision.fxml"));
+            Parent root = loader.load();
+
+            GenerarNotaRemisionController controller = loader.getController();
+
+            controller.setVentaData(idVentaGenerado, java.time.LocalDate.now().toString(), total, listaCarrito);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            limpiarVenta();
+
+            cargarProductos();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -360,8 +490,8 @@ public class RegistrarVentaController implements Initializable {
     }
 
     @FXML
-    private void generarNota(ActionEvent event) {
-
+    private void generarNota(ActionEvent event) throws IOException {
+        App.setRoot("generarNotaRemision");
     }
 
     @FXML
