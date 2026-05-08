@@ -15,12 +15,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import modelos.Sesion;
+import modelos.Usuario;
 
 public class Menu_principalController implements Initializable {
+    
+    @FXML private Button btn_adminUsuario;
+    @FXML private Button btn_copias;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Inicialización (si necesitas algo)
+        Usuario actual = Sesion.getUsuario();
+
+        if (actual != null) {
+            if (actual.getIdUsuario() != 1) {
+            btn_adminUsuario.setDisable(true);
+            btn_copias.setDisable(true);
+            }
+        }
     }    
 
     // 🔹 ADMIN USUARIOS

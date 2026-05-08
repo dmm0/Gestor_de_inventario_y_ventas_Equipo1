@@ -140,7 +140,7 @@
 
                         <Button fx:id="btn_imprimirTicket" mnemonicParsing="false" onAction="#imprimirTicket" text="Imprimir ticket" />
 
-                        <Button fx:id="btn_solicitarFactura" mnemonicParsing="false" onAction="#solicitarFactura" text="Solicitar factura" />
+                        <Button fx:id="btn_menu" mnemonicParsing="false" onAction="#regresarMenu" text="Regresar al menú" />
 
                     </children>
 

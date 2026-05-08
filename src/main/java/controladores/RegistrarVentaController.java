@@ -108,6 +108,7 @@ public class RegistrarVentaController implements Initializable {
 
     private ObservableList<DetalleVentaTabla> listaCarrito
             = FXCollections.observableArrayList();
+      
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -510,5 +511,10 @@ public class RegistrarVentaController implements Initializable {
         lbl_Iva.setText("IVA: 0.00");
 
         lbl_Total.setText("Total: 0.00");
+    }
+    
+    @FXML
+    private void regresarMenu() throws IOException {
+        App.setRoot("menu_principal");
     }
 }

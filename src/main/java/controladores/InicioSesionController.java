@@ -8,12 +8,17 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import modelos.Sesion;
+import modelos.Usuario;
 
 public class InicioSesionController implements Initializable {
 
-    @FXML private TextField txtUsuario;
-    @FXML private PasswordField txtPassword;
-    @FXML private TextField txtPasswordVisible;
+    @FXML
+    private TextField txtUsuario;
+    @FXML
+    private PasswordField txtPassword;
+    @FXML
+    private TextField txtPasswordVisible;
 
     private boolean mostrando = false;
 
@@ -44,8 +49,8 @@ public class InicioSesionController implements Initializable {
         String usuario = txtUsuario.getText().trim();
 
         // Tomar contraseña dependiendo de cuál está visible
-        String password = mostrando 
-                ? txtPasswordVisible.getText().trim() 
+        String password = mostrando
+                ? txtPasswordVisible.getText().trim()
                 : txtPassword.getText().trim();
 
         if (usuario.isEmpty() || password.isEmpty()) {
@@ -55,6 +60,7 @@ public class InicioSesionController implements Initializable {
 
         if (validarLogin(usuario, password)) {
             mostrarAlerta("Bienvenido " + usuario);
+
             App.setRoot("menu_principal");
         } else {
             mostrarAlerta("Usuario o contraseña incorrectos");
@@ -67,7 +73,9 @@ public class InicioSesionController implements Initializable {
 
         try (Connection con = Conexion.getConnection()) {
 
-            if (con == null) return false;
+            if (con == null) {
+                return false;
+            }
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, usuario);
@@ -75,7 +83,19 @@ public class InicioSesionController implements Initializable {
 
             ResultSet rs = ps.executeQuery();
 
-            return rs.next();
+            if (rs.next()) {
+                Usuario user = new Usuario();
+                user.setIdUsuario(rs.getInt("id_usuario"));
+                user.setUsuario(rs.getString("usuario"));
+                user.setRol(rs.getString("rol"));
+
+                // Guardamos en la sesión global
+                Sesion.setUsuario(user);
+
+                return true; // Si entró aquí, es que el login es correcto
+            }
+
+            return false;
 
         } catch (Exception e) {
             e.printStackTrace();
