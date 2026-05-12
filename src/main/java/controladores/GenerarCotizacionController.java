@@ -165,7 +165,7 @@ public class GenerarCotizacionController
 
             String sql =
                     "SELECT COUNT(*) "
-                    + "FROM cotizacion";
+                    + "FROM Cotizacion";
 
             PreparedStatement ps =
                     con.prepareStatement(sql);
@@ -516,7 +516,7 @@ public class GenerarCotizacionController
         ) {
 
             String sqlCotizacion =
-                    "INSERT INTO cotizacion "
+                    "INSERT INTO Cotizacion "
                     + "("
                     + "folio,"
                     + "id_cliente,"
@@ -583,7 +583,7 @@ public class GenerarCotizacionController
             }
 
             String sqlDetalle =
-                    "INSERT INTO detalle_cotizacion "
+                    "INSERT INTO Detalle_Cotizacion "
                     + "("
                     + "id_cotizacion,"
                     + "producto,"

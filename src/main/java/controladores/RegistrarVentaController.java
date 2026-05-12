@@ -487,6 +487,8 @@ public class RegistrarVentaController implements Initializable {
 
     @FXML
     private void imprimirTicket(ActionEvent event) {
+        
+        
 
     }
 

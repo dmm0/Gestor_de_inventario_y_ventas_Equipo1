@@ -75,7 +75,7 @@ public class BuscarClienteController {
         lista.clear();
 
         String sql =
-                "SELECT * FROM cliente "
+                "SELECT * FROM Clientes "
                 + "WHERE nombre LIKE ?";
 
         try (Connection con =

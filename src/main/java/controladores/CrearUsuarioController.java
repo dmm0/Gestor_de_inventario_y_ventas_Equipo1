@@ -61,7 +61,7 @@ public class CrearUsuarioController {
         try (Connection con = Conexion.getConnection()) {
 
             PreparedStatement psEmp = con.prepareStatement(
-                "INSERT INTO empleado(nombre, telefono, puesto, correo) VALUES (?,?,?,?)",
+                "INSERT INTO Empleados(nombre, telefono, puesto, correo) VALUES (?,?,?,?)",
                 Statement.RETURN_GENERATED_KEYS
             );
 
@@ -83,7 +83,7 @@ public class CrearUsuarioController {
             }
 
             PreparedStatement psUser = con.prepareStatement(
-                "INSERT INTO usuario(usuario, contraseña, estado, rol, empleado_id_empleado) VALUES (?,?,?,?,?)"
+                "INSERT INTO Usuarios(usuario, contrasena, estado, rol, id_empleado) VALUES (?,?,?,?,?)"
             );
 
             psUser.setString(1, txtUsuario.getText());
