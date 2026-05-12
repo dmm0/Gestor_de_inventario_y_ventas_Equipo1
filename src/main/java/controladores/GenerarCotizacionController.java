@@ -524,9 +524,10 @@ public class GenerarCotizacionController
                     + "iva,"
                     + "descuento,"
                     + "total,"
-                    + "estado"
+                    + "estado,"
+                    + "fecha"
                     + ") "
-                    + "VALUES(?,?,?,?,?,?,?)";
+                    + "VALUES(?,?,?,?,?,?,?,?)";
 
             PreparedStatement ps =
                     con.prepareStatement(
@@ -567,6 +568,11 @@ public class GenerarCotizacionController
             ps.setString(
                     7,
                     "PENDIENTE"
+            );
+            
+            ps.setDate(
+                    8,
+                    new java.sql.Date(System.currentTimeMillis())
             );
 
             ps.executeUpdate();
